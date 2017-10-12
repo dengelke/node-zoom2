@@ -1,24 +1,25 @@
 {
-  "name": "node-zoom",
+  "name": "node-zoom2",
   "version": "0.1.1",
-  "description": "z39.50",
+  "description": "z39.50 with Node 4+ support",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
+  "engines" : { "node" : ">=0.10" },
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha tests",
     "install": "node-gyp rebuild"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/poying/node-zoom.git"
+    "url": "git://github.com/dengelke/node-zoom2.git"
   },
   "keywords": [
     "zoom",
     "z39.50"
   ],
-  "author": "Po-Ying Chen <poying.me@gmail.com>",
+  "author": "Daniel Engelke <dengelke91@gmail.com>",
   "license": "MIT",
   "gypfile": true,
   "devDependencies": {
