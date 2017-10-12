@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha test",
+    "test": "node ./node_modules/mocha/bin/mocha tests",
     "install": "node-gyp rebuild"
   },
   "repository": {
@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "bindings": "^1.2.1",
-    "nan": "1.5.1"
+    "nan": "1.X"
   }
 }
