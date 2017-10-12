@@ -1,4 +1,4 @@
-NODE-ZOOM
+NODE-ZOOM2
 =========
 
 ### Requirements
@@ -16,13 +16,13 @@ $ sudo apt-get install libgcrypt11-dev libgnutls28-dev libxml2-dev
 ### Installaction
 
 ```bash
-$ npm i node-zoom
+$ npm i node-zoom2
 ```
 
 ## Example
 
 ```javascript
-var zoom = require('node-zoom');
+var zoom = require('node-zoom2');
 
 zoom.connection('192.83.186.170:210/INNOPAC')
   .set('preferredRecordSyntax', 'usmarc')
