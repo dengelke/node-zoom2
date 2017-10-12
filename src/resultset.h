@@ -7,7 +7,7 @@ extern "C"{
 
 namespace node_zoom {
 
-class ResultSet : public node::ObjectWrap {
+class ResultSet : public Nan::ObjectWrap {
     public:
         explicit ResultSet(ZOOM_resultset resultset);
         ~ResultSet();
@@ -18,17 +18,17 @@ class ResultSet : public node::ObjectWrap {
         static NAN_METHOD(SetOption);
         static NAN_METHOD(GetRecords);
         static NAN_METHOD(Size);
-        static v8::Persistent<v8::Function> constructor;
+        static Nan::Persistent<v8::Function> constructor;
 
     protected:
         ZOOM_resultset zset_;
 };
 
-class GetRecordsWorker : public NanAsyncWorker {
+class GetRecordsWorker : public Nan::AsyncWorker {
     public:
-        GetRecordsWorker(NanCallback *callback, ZOOM_resultset resultset,
+        GetRecordsWorker(Nan::Callback *callback, ZOOM_resultset resultset,
             size_t index, size_t counts) :
-            NanAsyncWorker(callback), zresultset_(resultset),
+            Nan::AsyncWorker(callback), zresultset_(resultset),
             index_(index), counts_(counts) {};
         ~GetRecordsWorker() {};
         void Execute();

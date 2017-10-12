@@ -5,22 +5,22 @@ using namespace v8;
 
 namespace node_zoom {
 
-Persistent<Function> Options::constructor;
+Nan::Persistent<Function> Options::constructor;
 
 void Options::Init(Handle<Object> exports) {
-    NanScope();
+    Nan::HandleScope scope;
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-    tpl->SetClassName(NanNew("Options"));
+    Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+    tpl->SetClassName(Nan::New("Options").ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     
     // Prototype
-    NODE_SET_PROTOTYPE_METHOD(tpl, "get", Get);
-    NODE_SET_PROTOTYPE_METHOD(tpl, "set", Set);
+    Nan::SetPrototypeMethod(tpl, "get", Get);
+    Nan::SetPrototypeMethod(tpl, "set", Set);
 
-    NanAssignPersistent(constructor, tpl->GetFunction());
-    exports->Set(NanNew("Options"), tpl->GetFunction());
+    constructor.Reset(tpl->GetFunction());
+    exports->Set(Nan::New("Options").ToLocalChecked(), tpl->GetFunction());
 }
 
 Options::Options() {
@@ -40,67 +40,67 @@ ZOOM_options Options::zoom_options() {
 }
 
 NAN_METHOD(Options::New) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    if (args.IsConstructCall()) {
+    if (info.IsConstructCall()) {
         Options* obj;
 
-        if (args[0]->IsUndefined()) {
+        if (info[0]->IsUndefined()) {
             obj = new Options();
         } else {
-            Options* opts = node::ObjectWrap::Unwrap<Options>(args[0]->ToObject());
+            Options* opts = Nan::ObjectWrap::Unwrap<Options>(info[0]->ToObject());
             obj = new Options(opts);
         }
 
-        obj->Wrap(args.This());
-        NanReturnValue(args.This());
+        obj->Wrap(info.This());
+        info.GetReturnValue().Set(info.This());
     } else {
         const int argc = 1;
-        Local<Value> argv[argc] = { args[0] };
-        Local<Function> cons = NanNew<Function>(constructor);
-        NanReturnValue(cons->NewInstance(argc, argv));
+        Local<Value> argv[argc] = { info[0] };
+        Local<Function> cons = Nan::New<Function>(constructor);
+        info.GetReturnValue().Set(cons->NewInstance(argc, argv));
     }
 }
 
 NAN_METHOD(Options::Get) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    if (args.Length() < 1) {
-        NanThrowError(ArgsSizeError("Set", 1, args.Length()));
+    if (info.Length() < 1) {
+        Nan::ThrowError(ArgsSizeError("Set", 1, info.Length()));
         return;
     }
 
-    NanUtf8String key(args[0]);
-    Options* opts = node::ObjectWrap::Unwrap<Options>(args.This());
+    Nan::Utf8String key(info[0]);
+    Options* opts = Nan::ObjectWrap::Unwrap<Options>(info.This());
 
     const char *value = ZOOM_options_get(opts->zopts_, *key);
 
     if (value) {
-        NanReturnValue(NanNew(value));
+        info.GetReturnValue().Set(Nan::New(value).ToLocalChecked());
     }
 }
 
 NAN_METHOD(Options::Set) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    if (args.Length() < 2) {
-        NanThrowError(ArgsSizeError("Set", 2, args.Length()));
+    if (info.Length() < 2) {
+        Nan::ThrowError(ArgsSizeError("Set", 2, info.Length()));
         return;
     }
 
-    if (!args[0]->IsString()) {
-        NanThrowError(ArgTypeError("first", "string"));
+    if (!info[0]->IsString()) {
+        Nan::ThrowError(ArgTypeError("first", "string"));
         return;
     }
 
-    Options* opts = node::ObjectWrap::Unwrap<Options>(args.This());
+    Options* opts = Nan::ObjectWrap::Unwrap<Options>(info.This());
 
-    NanUtf8String key(args[0]);
-    NanUtf8String value(args[1]);
+    Nan::Utf8String key(info[0]);
+    Nan::Utf8String value(info[1]);
 
     ZOOM_options_set(opts->zopts_, *key, *value);
 
-    NanReturnValue(args.This());
+    info.GetReturnValue().Set(info.This());
 }
 
 } // namespace node_zoom

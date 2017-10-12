@@ -9,23 +9,23 @@ using namespace v8;
 
 namespace node_zoom {
 
-Persistent<Function> Connection::constructor;
+Nan::Persistent<Function> Connection::constructor;
 
 void Connection::Init(Handle<Object> exports) {
-    NanScope();
+    Nan::HandleScope scope;
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-    tpl->SetClassName(NanNew("Connection"));
+    Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+    tpl->SetClassName(Nan::New("Connection").ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     
     // Prototype
-    NODE_SET_PROTOTYPE_METHOD(tpl, "connect", Connect);
-    NODE_SET_PROTOTYPE_METHOD(tpl, "destory", Destory);
-    NODE_SET_PROTOTYPE_METHOD(tpl, "search", Search);
+    Nan::SetPrototypeMethod(tpl, "connect", Connect);
+    Nan::SetPrototypeMethod(tpl, "destory", Destory);
+    Nan::SetPrototypeMethod(tpl, "search", Search);
 
-    NanAssignPersistent(constructor, tpl->GetFunction());
-    exports->Set(NanNew("Connection"), tpl->GetFunction());
+    constructor.Reset(tpl->GetFunction());
+    exports->Set(Nan::New("Connection").ToLocalChecked(), tpl->GetFunction());
 }
 
 Connection::Connection(Options *opts) {
@@ -37,92 +37,92 @@ Connection::~Connection() {
 }
 
 NAN_METHOD(Connection::New) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    if (args.IsConstructCall()) {
-        if (args.Length() < 1) {
-            NanThrowError(ArgsSizeError("Constructor", 1, args.Length()));
+    if (info.IsConstructCall()) {
+        if (info.Length() < 1) {
+            Nan::ThrowError(ArgsSizeError("Constructor", 1, info.Length()));
             return;
         }
-        Options* opts = node::ObjectWrap::Unwrap<Options>(args[0]->ToObject());
+        Options* opts = Nan::ObjectWrap::Unwrap<Options>(info[0]->ToObject());
         Connection* obj = new Connection(opts);
-        obj->Wrap(args.This());
-        NanReturnValue(args.This());
+        obj->Wrap(info.This());
+        info.GetReturnValue().Set(info.This());
     } else {
         const int argc = 1;
-        Local<Value> argv[argc] = { args[0] };
-        Local<Function> cons = NanNew<Function>(constructor);
-        NanReturnValue(cons->NewInstance(argc, argv));
+        Local<Value> argv[argc] = { info[0] };
+        Local<Function> cons = Nan::New<Function>(constructor);
+        info.GetReturnValue().Set(cons->NewInstance(argc, argv));
     }
 }
 
 NAN_METHOD(Connection::Connect) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    if (args.Length() < 2) {
-        NanThrowError(ArgsSizeError("Connect", 2, args.Length()));
+    if (info.Length() < 2) {
+        Nan::ThrowError(ArgsSizeError("Connect", 2, info.Length()));
         return;
     }
 
-    if (!args[0]->IsString()) {
-        NanThrowError(ArgTypeError("first", "string"));
+    if (!info[0]->IsString()) {
+        Nan::ThrowError(ArgTypeError("first", "string"));
         return;
     }
 
-    if (!args[1]->IsNumber()) {
-        NanThrowError(ArgTypeError("second", "number"));
+    if (!info[1]->IsNumber()) {
+        Nan::ThrowError(ArgTypeError("second", "number"));
         return;
     }
 
-    if (!args[2]->IsFunction()) {
-        NanThrowError(ArgTypeError("third", "function"));
+    if (!info[2]->IsFunction()) {
+        Nan::ThrowError(ArgTypeError("third", "function"));
         return;
     }
 
-    Connection* connection = node::ObjectWrap::Unwrap<Connection>(args.This());
+    Connection* connection = Nan::ObjectWrap::Unwrap<Connection>(info.This());
 
-    NanUtf8String *host = new NanUtf8String(args[0]);
-    int port = args[1]->Uint32Value();
-    NanCallback *callback = new NanCallback(args[2].As<Function>());
+    Nan::Utf8String *host = new Nan::Utf8String(info[0]);
+    int port = info[1]->Uint32Value();
+    Nan::Callback *callback = new Nan::Callback(info[2].As<Function>());
     ConnectWorker *worker = new ConnectWorker(
         callback, connection->zconn_, host, port);
 
-    NanAsyncQueueWorker(worker);
+    Nan::AsyncQueueWorker(worker);
 }
 
 NAN_METHOD(Connection::Destory) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    Connection* connection = node::ObjectWrap::Unwrap<Connection>(args.This());
+    Connection* connection = Nan::ObjectWrap::Unwrap<Connection>(info.This());
     ZOOM_connection_destroy(connection->zconn_);
 }
 
 NAN_METHOD(Connection::Search) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    if (args.Length() < 2) {
-        NanThrowError(ArgsSizeError("Search", 1, args.Length()));
+    if (info.Length() < 2) {
+        Nan::ThrowError(ArgsSizeError("Search", 1, info.Length()));
         return;
     }
 
-    if (!args[0]->IsObject()) {
-        NanThrowError(ArgTypeError("first", "object"));
+    if (!info[0]->IsObject()) {
+        Nan::ThrowError(ArgTypeError("first", "object"));
         return;
     }
 
-    if (!args[1]->IsFunction()) {
-        NanThrowError(ArgTypeError("second", "function"));
+    if (!info[1]->IsFunction()) {
+        Nan::ThrowError(ArgTypeError("second", "function"));
         return;
     }
 
-    Connection* connection = node::ObjectWrap::Unwrap<Connection>(args.This());
-    Query* query = node::ObjectWrap::Unwrap<Query>(args[0]->ToObject());
+    Connection* connection = Nan::ObjectWrap::Unwrap<Connection>(info.This());
+    Query* query = Nan::ObjectWrap::Unwrap<Query>(info[0]->ToObject());
     
-    NanCallback *callback = new NanCallback(args[1].As<Function>());
+    Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
     SearchWorker *worker = new SearchWorker(
         callback, connection->zconn_, query->zoom_query());
 
-    NanAsyncQueueWorker(worker);
+    Nan::AsyncQueueWorker(worker);
 }
 
 ConnectWorker::~ConnectWorker() {
@@ -166,14 +166,14 @@ void SearchWorker::Execute() {
 }
 
 void SearchWorker::HandleOKCallback() {
-    NanScope();
+    Nan::HandleScope scope;
 
     ResultSet* resultset = new ResultSet(zresultset_);
-    Local<Object> wrapper = NanNew(ResultSet::constructor)->NewInstance();
-    NanSetInternalFieldPointer(wrapper, 0, resultset);
+    Local<Object> wrapper = Nan::New(ResultSet::constructor)->NewInstance();
+    Nan::SetInternalFieldPointer(wrapper, 0, resultset);
 
     Local<Value> argv[] = {
-        NanNull(),
+        Nan::Null(),
         wrapper
     };
 

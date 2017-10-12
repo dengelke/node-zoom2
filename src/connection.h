@@ -8,7 +8,7 @@ extern "C" {
 
 namespace node_zoom {
 
-class Connection : public node::ObjectWrap {
+class Connection : public Nan::ObjectWrap {
     public:
         explicit Connection(Options *opts);
         ~Connection();
@@ -21,29 +21,29 @@ class Connection : public node::ObjectWrap {
 
     protected:
         ZOOM_connection zconn_;
-        static v8::Persistent<v8::Function> constructor;
+        static Nan::Persistent<v8::Function> constructor;
 };
 
-class ConnectWorker : public NanAsyncWorker {
+class ConnectWorker : public Nan::AsyncWorker {
     public:
-        ConnectWorker(NanCallback *callback, ZOOM_connection zconn,
-            NanUtf8String *host, int port) :
-            NanAsyncWorker(callback), zconn_(zconn),
+        ConnectWorker(Nan::Callback *callback, ZOOM_connection zconn,
+            Nan::Utf8String *host, int port) :
+            Nan::AsyncWorker(callback), zconn_(zconn),
             host_(host), port_(port) {};
         ~ConnectWorker();
         void Execute();
 
     protected:
         ZOOM_connection zconn_;
-        NanUtf8String *host_;
+        Nan::Utf8String *host_;
         int port_;
 };
 
-class SearchWorker : public NanAsyncWorker {
+class SearchWorker : public Nan::AsyncWorker {
     public:
-        SearchWorker(NanCallback *callback, ZOOM_connection zconn,
+        SearchWorker(Nan::Callback *callback, ZOOM_connection zconn,
             ZOOM_query query) :
-            NanAsyncWorker(callback), zconn_(zconn), zquery_(query) {};
+            Nan::AsyncWorker(callback), zconn_(zconn), zquery_(query) {};
         ~SearchWorker() {};
         void Execute();
         void HandleOKCallback();

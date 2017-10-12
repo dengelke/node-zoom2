@@ -15,7 +15,7 @@ v8::Local<v8::Value> ArgsSizeError(const char *fnname, int expect, int actual) {
         << " arguments"
         << " (" << actual << " given)";
 
-    return NanTypeError(ss.str().c_str());
+    return Nan::TypeError(ss.str().c_str());
 }
 
 v8::Local<v8::Value> ArgTypeError(const char *arg, const char *expect) {
@@ -35,7 +35,7 @@ v8::Local<v8::Value> ArgTypeError(const char *arg, const char *expect) {
         << (is_vowel ? "an" : "a")
         << " " << expect;
 
-    return NanTypeError(ss.str().c_str());
+    return Nan::TypeError(ss.str().c_str());
 }
 
 } // namespace node_zoom

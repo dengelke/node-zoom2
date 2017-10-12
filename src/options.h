@@ -7,7 +7,7 @@ extern "C" {
 
 namespace node_zoom {
 
-class Options : public node::ObjectWrap {
+class Options : public Nan::ObjectWrap {
     public:
         Options();
         explicit Options(Options *opts);
@@ -21,7 +21,7 @@ class Options : public node::ObjectWrap {
     
     protected:
         ZOOM_options zopts_;
-        static v8::Persistent<v8::Function> constructor;
+        static Nan::Persistent<v8::Function> constructor;
 };
 
 } // namespace node_zoom

@@ -7,27 +7,27 @@ namespace node_zoom {
 
 void check_query_ret(int ret) {
     if (ret == -1) {
-        NanThrowError("Query Error");
+        Nan::ThrowError("Query Error");
     }
 }
 
-Persistent<Function> Query::constructor;
+Nan::Persistent<Function> Query::constructor;
 
 void Query::Init(Handle<Object> exports) {
-    NanScope();
+    Nan::HandleScope scope;
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-    tpl->SetClassName(NanNew("Query"));
+    Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+    tpl->SetClassName(Nan::New("Query").ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     
     // Prototype
-    NODE_SET_PROTOTYPE_METHOD(tpl, "prefix", Prefix);
-    NODE_SET_PROTOTYPE_METHOD(tpl, "cql", CQL);
-    NODE_SET_PROTOTYPE_METHOD(tpl, "sortBy", SortBy);
+    Nan::SetPrototypeMethod(tpl, "prefix", Prefix);
+    Nan::SetPrototypeMethod(tpl, "cql", CQL);
+    Nan::SetPrototypeMethod(tpl, "sortBy", SortBy);
 
-    NanAssignPersistent(constructor, tpl->GetFunction());
-    exports->Set(NanNew("Query"), tpl->GetFunction());
+    constructor.Reset(tpl->GetFunction());
+    exports->Set(Nan::New("Query").ToLocalChecked(), tpl->GetFunction());
 }
 
 Query::Query() {
@@ -39,47 +39,47 @@ Query::~Query() {
 }
 
 NAN_METHOD(Query::New) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    if (args.IsConstructCall()) {
+    if (info.IsConstructCall()) {
         Query* obj = new Query();
-        obj->Wrap(args.This());
-        NanReturnValue(args.This());
+        obj->Wrap(info.This());
+        info.GetReturnValue().Set(info.This());
     } else {
         const int argc = 0;
         Local<Value> argv[argc] = {};
-        Local<Function> cons = NanNew<Function>(constructor);
-        NanReturnValue(cons->NewInstance(argc, argv));
+        Local<Function> cons = Nan::New<Function>(constructor);
+        info.GetReturnValue().Set(cons->NewInstance(argc, argv));
     }
 }
 
 NAN_METHOD(Query::Prefix) {
-    NanScope();
-    Query* query = node::ObjectWrap::Unwrap<Query>(args.This());
-    NanUtf8String query_str(args[0]);
+    Nan::HandleScope scope;
+    Query* query = Nan::ObjectWrap::Unwrap<Query>(info.This());
+    Nan::Utf8String query_str(info[0]);
     int ret = ZOOM_query_prefix(query->zquery_, *query_str);
     check_query_ret(ret);
-    NanReturnValue(args.This());
+    info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(Query::CQL) {
-    NanScope();
-    Query* query = node::ObjectWrap::Unwrap<Query>(args.This());
-    NanUtf8String query_str(args[0]);
+    Nan::HandleScope scope;
+    Query* query = Nan::ObjectWrap::Unwrap<Query>(info.This());
+    Nan::Utf8String query_str(info[0]);
     int ret = ZOOM_query_cql(query->zquery_, *query_str);
     check_query_ret(ret);
-    NanReturnValue(args.This());
+    info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(Query::SortBy) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    Query* query = node::ObjectWrap::Unwrap<Query>(args[0]->ToObject());
+    Query* query = Nan::ObjectWrap::Unwrap<Query>(info[0]->ToObject());
     int ret;
-    NanUtf8String strategy(args[0]);
-    NanUtf8String criteria(args[1]);
+    Nan::Utf8String strategy(info[0]);
+    Nan::Utf8String criteria(info[1]);
 
-    switch (args.Length()) {
+    switch (info.Length()) {
         case 1:
             ret = ZOOM_query_sortby(query->zquery_, *strategy);
             check_query_ret(ret);
@@ -89,11 +89,11 @@ NAN_METHOD(Query::SortBy) {
             check_query_ret(ret);
             break;
         default:
-            NanThrowError(ArgsSizeError("SortBy", 2, args.Length()));
+            Nan::ThrowError(ArgsSizeError("SortBy", 2, info.Length()));
             return;
     }
 
-    NanReturnValue(args.This());
+    info.GetReturnValue().Set(info.This());
 }
 
 ZOOM_query Query::zoom_query() {

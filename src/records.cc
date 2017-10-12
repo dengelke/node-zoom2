@@ -6,21 +6,21 @@ using namespace v8;
 
 namespace node_zoom {
 
-Persistent<Function> Records::constructor;
+Nan::Persistent<Function> Records::constructor;
 
 void Records::Init() {
-    NanScope();
+    Nan::HandleScope scope;
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-    tpl->SetClassName(NanNew("Records"));
+    Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+    tpl->SetClassName(Nan::New("Records").ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     
     // Prototype
-    NODE_SET_PROTOTYPE_METHOD(tpl, "next", Next);
-    NODE_SET_PROTOTYPE_METHOD(tpl, "hasNext", HasNext);
+    Nan::SetPrototypeMethod(tpl, "next", Next);
+    Nan::SetPrototypeMethod(tpl, "hasNext", HasNext);
 
-    NanAssignPersistent(constructor, tpl->GetFunction());
+    constructor.Reset(tpl->GetFunction());
 }
 
 Records::~Records() {
@@ -30,29 +30,29 @@ Records::~Records() {
 NAN_METHOD(Records::New) {}
 
 NAN_METHOD(Records::Next) {
-    NanScope();
-    Records* resset = node::ObjectWrap::Unwrap<Records>(args.This());
+    Nan::HandleScope scope;
+    Records* resset = Nan::ObjectWrap::Unwrap<Records>(info.This());
 
     if (resset->index_ >= resset->counts_) {
-        NanThrowRangeError("Out of range");
+        Nan::ThrowRangeError("Out of range");
     } else {
         ZOOM_record zrecord = resset->zrecords_[resset->index_++];
 
         if (zrecord == NULL) {
-            NanReturnNull();
+            info.GetReturnValue().Set(Nan::Null());
         } else {
             Record* record = new Record(ZOOM_record_clone(zrecord));
-            Local<Object> wrapper = NanNew(Record::constructor)->NewInstance();
-            NanSetInternalFieldPointer(wrapper, 0, record);
-            NanReturnValue(wrapper);
+            Local<Object> wrapper = Nan::New(Record::constructor)->NewInstance();
+            Nan::SetInternalFieldPointer(wrapper, 0, record);
+            info.GetReturnValue().Set(wrapper);
         }
     }
 }
 
 NAN_METHOD(Records::HasNext) {
-    NanScope();
-    Records* resset = node::ObjectWrap::Unwrap<Records>(args.This());
-    NanReturnValue(NanNew<Boolean>(resset->index_ < resset->counts_));
+    Nan::HandleScope scope;
+    Records* resset = Nan::ObjectWrap::Unwrap<Records>(info.This());
+    info.GetReturnValue().Set(Nan::New<Boolean>(resset->index_ < resset->counts_));
 }
 
 } // namespace node_zoom

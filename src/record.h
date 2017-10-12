@@ -7,7 +7,7 @@ extern "C" {
 
 namespace node_zoom {
 
-class Record : public node::ObjectWrap {
+class Record : public Nan::ObjectWrap {
     public:
         explicit Record(ZOOM_record record);
         ~Record();
@@ -15,7 +15,7 @@ class Record : public node::ObjectWrap {
         static void Init();
         static NAN_METHOD(New);
         static NAN_METHOD(Get);
-        static v8::Persistent<v8::Function> constructor;
+        static Nan::Persistent<v8::Function> constructor;
 
     protected:
         ZOOM_record zrecord_;

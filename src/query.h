@@ -7,7 +7,7 @@ extern "C" {
 
 namespace node_zoom {
 
-class Query : public node::ObjectWrap {
+class Query : public Nan::ObjectWrap {
     public:
         explicit Query();
         ~Query();
@@ -21,7 +21,7 @@ class Query : public node::ObjectWrap {
 
     protected:
         ZOOM_query zquery_;
-        static v8::Persistent<v8::Function> constructor;
+        static Nan::Persistent<v8::Function> constructor;
 };
 
 } // namespace node_zoom

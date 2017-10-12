@@ -5,20 +5,20 @@ using namespace v8;
 
 namespace node_zoom {
 
-Persistent<Function> Record::constructor;
+Nan::Persistent<Function> Record::constructor;
 
 void Record::Init() {
-    NanScope();
+    Nan::HandleScope scope;
 
     // Prepare constructor template
-    Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-    tpl->SetClassName(NanNew("Record"));
+    Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+    tpl->SetClassName(Nan::New("Record").ToLocalChecked());
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     
     // Prototype
-    NODE_SET_PROTOTYPE_METHOD(tpl, "get", Get);
+    Nan::SetPrototypeMethod(tpl, "get", Get);
 
-    NanAssignPersistent(constructor, tpl->GetFunction());
+    constructor.Reset(tpl->GetFunction());
 }
 
 Record::Record(ZOOM_record record) : zrecord_(record) {}
@@ -30,20 +30,20 @@ Record::~Record() {
 NAN_METHOD(Record::New) {}
 
 NAN_METHOD(Record::Get) {
-    NanScope();
+    Nan::HandleScope scope;
 
-    Record* record = node::ObjectWrap::Unwrap<Record>(args.This());
+    Record* record = Nan::ObjectWrap::Unwrap<Record>(info.This());
 
-    if (args.Length() < 1) {
-        NanThrowError(ArgsSizeError("Get", 1, args.Length()));
+    if (info.Length() < 1) {
+        Nan::ThrowError(ArgsSizeError("Get", 1, info.Length()));
         return;
     }
 
-    NanUtf8String type(args[0]);
+    Nan::Utf8String type(info[0]);
     const char *value = ZOOM_record_get(record->zrecord_, *type, NULL);
 
     if (value) {
-        NanReturnValue(NanNew(value));
+        info.GetReturnValue().Set(Nan::New(value).ToLocalChecked());
     }
 }
 
