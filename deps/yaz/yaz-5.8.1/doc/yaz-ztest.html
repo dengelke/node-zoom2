@@ -1,0 +1,334 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>yaz-ztest</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="reference.html" title="Reference"><link rel="prev" href="yaz-client.html" title="yaz-client"><link rel="next" href="yaz-config.html" title="yaz-config"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">yaz-ztest</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="yaz-client.html">Prev</a> </td><th width="60%" align="center">Reference</th><td width="20%" align="right"> <a accesskey="n" href="yaz-config.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="yaz-ztest"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>yaz-ztest &#8212; Z39.50/SRU Test Server</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">application</code>  [<code class="option">-install</code>] [<code class="option">-installa</code>] [<code class="option">-remove</code>] [<code class="option">-a <em class="replaceable"><code>file</code></em></code>] [<code class="option">-v <em class="replaceable"><code>level</code></em></code>] [<code class="option">-l <em class="replaceable"><code>file</code></em></code>] [<code class="option">-u <em class="replaceable"><code>uid</code></em></code>] [<code class="option">-c <em class="replaceable"><code>config</code></em></code>] [<code class="option">-f <em class="replaceable"><code>vconfig</code></em></code>] [<code class="option">-C <em class="replaceable"><code>fname</code></em></code>] [<code class="option">-t <em class="replaceable"><code>minutes</code></em></code>] [<code class="option">-k <em class="replaceable"><code>kilobytes</code></em></code>] [<code class="option">-K</code>] [<code class="option">-d <em class="replaceable"><code>daemon</code></em></code>] [<code class="option">-w <em class="replaceable"><code>dir</code></em></code>] [<code class="option">-p <em class="replaceable"><code>pidfile</code></em></code>] [<code class="option">-r <em class="replaceable"><code>kilobytes</code></em></code>] [<code class="option">-ziDSTV1</code>] [listener-spec...]</p></div></div><div class="refsect1"><a name="idp51858976"></a><h2>DESCRIPTION</h2><p>
+   <span class="command"><strong>yaz-ztest</strong></span> is a Z39.50/SRU test server that uses
+   the YAZ generic frontend server (GFS) API.
+   The server acts as a real Z39.50/SRU server but does not use a database.
+   It returns a random hit count and returns a subset of a few built-in
+   records.
+  </p><p>
+   The <em class="replaceable"><code>listener-spec</code></em> consists of a transport
+   mode followed by a colon, followed by a listener address. The
+   transport mode is either <code class="literal">tcp</code>, <code class="literal">unix</code>,
+   or <code class="literal">ssl</code>.
+  </p><p>
+   For TCP and SSL, an address has the form:
+   </p><pre class="screen">
+    hostname | IP-number [ : portnumber ]
+   </pre><p>
+  </p><p>
+   For UNIX local socket the address is the filename of the local socket.
+  </p></div><div class="refsect1"><a name="idp51865584"></a><h2>OPTIONS</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">-a </code>
+  <em class="replaceable"><code>file</code></em></span></dt><dd><p>
+   Specify a file for dumping PDUs (for diagnostic purposes).
+    The special name <code class="literal">-</code> (dash) sends output to
+    <code class="literal">stderr</code>.
+  </p></dd><dt><span class="term"><code class="literal">-S</code></span></dt><dd><p>
+   Don't fork or make threads on connection requests. This is good for
+   debugging, but not recommended for real operation: Although the
+   server is asynchronous and non-blocking, it can be nice to keep
+   a software malfunction (okay then, a crash) from affecting all
+   current users.
+   </p></dd><dt><span class="term"><code class="literal">-1</code></span></dt><dd><p>
+   Like <code class="literal">-S</code> but after one session the server
+   exits. This mode is for debugging <span class="emphasis"><em>only</em></span>.
+ </p></dd><dt><span class="term"><code class="literal">-T</code></span></dt><dd><p>
+   Operate the server in threaded mode. The server creates a thread
+   for each connection rather than a fork a process. Only available
+   on UNIX systems that offers POSIX threads.
+  </p></dd><dt><span class="term"><code class="literal">-s</code></span></dt><dd><p>
+   Use the SR protocol (obsolete).
+ </p></dd><dt><span class="term"><code class="literal">-z</code></span></dt><dd><p>
+   Use the Z39.50 protocol (default). This option and <code class="literal">-s</code>
+   complement each other.
+   You can use both multiple times on the same command
+   line, between listener-specifications (see below). This way, you
+   can set up the server to listen for connections in both protocols
+   concurrently, on different local ports.
+  </p></dd><dt><span class="term"><code class="literal">-l </code><em class="replaceable"><code>file</code></em></span></dt><dd><p>The logfile.
+  </p></dd><dt><span class="term"><code class="literal">-c </code><em class="replaceable"><code>config</code></em></span></dt><dd><p>A user option that serves as a specifier for some
+  sort of configuration, usually a filename.
+  The argument to this option is transferred to member
+  <code class="literal">configname</code> of the
+  <code class="literal">statserv_options_block</code>.
+  </p></dd><dt><span class="term"><code class="literal">-f </code><em class="replaceable"><code>vconfig</code></em></span></dt><dd><p>This specifies an XML file that describes
+  one or more YAZ frontend virtual servers.
+  </p></dd><dt><span class="term"><code class="literal">-C </code><em class="replaceable"><code>fname</code></em></span></dt><dd><p>Sets SSL certificate file name for server (PEM).
+ </p></dd><dt><span class="term"><code class="literal">-v </code><em class="replaceable"><code>level</code></em></span></dt><dd><p>
+   The log level. Use a comma-separated list of members of the set
+   {fatal,debug,warn,log,malloc,all,none}.
+  </p></dd><dt><span class="term"><code class="literal">-u </code><em class="replaceable"><code>uid</code></em></span></dt><dd><p>
+   Set user ID. Sets the real UID of the server process to that of the
+   given user. It's useful if you aren't comfortable with having the
+   server run as root, but you need to start it as such to bind a
+   privileged port.
+  </p></dd><dt><span class="term"><code class="literal">-w </code><em class="replaceable"><code>dir</code></em></span></dt><dd><p>
+   The server changes to this directory during before listening
+   on incoming connections. This option is useful
+   when the server is operating from the <span class="application">inetd</span>
+   daemon (see <code class="literal">-i</code>).
+  </p></dd><dt><span class="term">
+  <code class="literal">-p </code><em class="replaceable"><code>pidfile</code></em>
+ </span></dt><dd><p>
+  Specifies that the server should write its Process ID to
+  file given by <em class="replaceable"><code>pidfile</code></em>.
+  A typical location would be <code class="filename">/var/run/yaz-ztest.pid</code>.
+ </p></dd><dt><span class="term"><code class="literal">-i</code></span></dt><dd><p>
+   Use this to make the the server run from the
+   <span class="application">inetd</span> server (UNIX only).
+ </p></dd><dt><span class="term"><code class="literal">-D</code></span></dt><dd><p>
+   Use this to make the server put itself in the background and
+   run as a daemon. If neither <code class="literal">-i</code> nor
+   <code class="literal">-D</code> is given, the server starts in the foreground.
+  </p></dd><dt><span class="term"><code class="literal">-install</code></span></dt><dd><p>
+   Use this to install the server as an NT service
+   (Windows NT/2000/XP only).
+   Control the server by going to the Services in the Control Panel.
+ </p></dd><dt><span class="term"><code class="literal">-installa</code></span></dt><dd><p>
+   Use this to install the server as an NT service and mark it as "auto-start.
+   Control the server by going to the Services in the Control Panel.
+  </p></dd><dt><span class="term"><code class="literal">-remove</code></span></dt><dd><p>
+   Use this to remove the server from the NT services
+   (Windows NT/2000/XP only).
+ </p></dd><dt><span class="term"><code class="literal">-t </code><em class="replaceable"><code>minutes</code></em></span></dt><dd><p>
+   Idle session timeout, in minutes.
+ </p></dd><dt><span class="term"><code class="literal">-k </code><em class="replaceable"><code>size</code></em></span></dt><dd><p>
+   Maximum record size/message size, in kilobytes.
+  </p></dd><dt><span class="term"><code class="literal">-K</code></span></dt><dd><p>
+   Forces no-keepalive for HTTP sessions. By default GFS will keep
+   sessions alive for HTTP 1.1 sessions (as defined by the standard).
+   Using this option will force GFS to close the connection for each
+   operation.
+  </p></dd><dt><span class="term"><code class="literal">-r </code><em class="replaceable"><code>size</code></em></span></dt><dd><p>
+   Maximum size of log file before rotation occurs, in kilobytes.
+   Default size is 1048576 k (=1 GB).
+  </p></dd><dt><span class="term">
+   <code class="literal">-d </code><em class="replaceable"><code>daemon</code></em>
+  </span></dt><dd><p>
+   Set name of daemon to be used in hosts access file.
+   See
+   <span class="citerefentry"><span class="refentrytitle">hosts_access</span>(5)</span>
+   and
+   <span class="citerefentry"><span class="refentrytitle">tcpd</span>(8)</span>.
+  </p></dd><dt><span class="term"><code class="literal">-m </code><em class="replaceable"><code>time-format</code></em></span></dt><dd><p>
+   Sets the format of time-stamps in the log-file. Specify a string in
+   the input format to <code class="literal">strftime()</code>.
+  </p></dd><dt><span class="term"><code class="literal">-V </code></span></dt><dd><p>
+   Display YAZ version and exit.
+  </p></dd></dl></div></div><div class="refsect1"><a name="idp51931808"></a><h2>TESTING</h2><p>
+    <span class="command"><strong>yaz-ztest</strong></span> normally returns a random hit count between
+    0 and 24. However, if a query term includes leading digits, then the
+    integer value of that term is used as hit count. This allows testers
+    to return any number of hits. <span class="command"><strong>yaz-ztest</strong></span> includes
+    24 MARC records for testing. Hit counts exceeding 24 will make
+    <span class="command"><strong>yaz-ztest</strong></span> return the same record batch over and over..
+    So record at position 1, 25, 49, etc .. are equivalent.
+   </p><p>
+    For XML if no element set is given or element has value "marcxml",
+    MARCXML is returned (each of the 24 dummy records converted from
+    ISO2709 to XML). For element set OP, OPAC XML is returned.
+   </p><p>
+    yaz-ztest may also return predefined XML records (for testing).
+    This is enabled if <code class="literal">YAZ_ZTEST_XML_FETCH</code> environment
+    variable is defined. A record is fetched form a file (one record per file).
+    The path for the filename is
+    <em class="replaceable"><code>F</code></em><em class="replaceable"><code>E</code></em><code class="literal">.</code><em class="replaceable"><code>d</code></em><code class="literal">.xml</code>
+    where <em class="replaceable"><code>F</code></em> is the YAZ_ZTEST_XML_FETCH value
+    (possibly
+    empty), <em class="replaceable"><code>E</code></em> is element-set,
+    <em class="replaceable"><code>d</code></em> is record position (starting from 1).
+   </p><p>
+     The following databases are honored by <span class="command"><strong>yaz-ztest</strong></span>:
+     <code class="literal">Default</code>, <code class="literal">slow</code>
+     and <code class="literal">db.*</code> (all databases with prefix "db"). Any
+     other database will make <span class="command"><strong>yaz-ztest</strong></span> return diagnostic
+     109: "Database unavailable".
+   </p><p>
+     Options for search may be included in the form or URL get arguments
+     included as part of the Z39.50 database name. The following
+     database options are present: <code class="literal">search-delay</code>,
+     <code class="literal">present-delay</code>, <code class="literal">fetch-delay</code>
+     and <code class="literal">seed</code>.
+   </p><p>
+     The former, delay type options, specify
+     a fake delay (sleep) that <span class="command"><strong>yaz-ztest</strong></span> will perform
+     when searching, presenting, fetching records respectively.
+     The value of the delay may either be a fixed floating point
+     value which specifies the delay in seconds.
+     Alternatively the value may be given as two floating point numbers
+     separated by colon, which wil make <span class="command"><strong>yaz-ztest</strong></span> perform
+     a random sleep between the first and second number.
+   </p><p>
+     The database parameter <code class="literal">seed</code> takes an integer
+     as value. This will call <code class="literal">srand</code> with this integer to
+     ensure that the random behavior can be re-played.
+   </p><p>
+     Suppose we want searches to take between 0.1 and 0.5 seconds and
+     a fetch to take 0.2 second. To access test database Default we'd use:
+     <code class="literal">Default?search-delay=0.1:0.5&amp;fetch-delay=0.2</code>.
+   </p></div><div class="refsect1"><a name="idp51953856"></a><h2>GFS CONFIGURATION AND VIRTUAL HOSTS</h2><p>
+ The Virtual hosts mechanism allows a YAZ frontend server to
+ support multiple backends. A backend is selected on the basis of
+ the TCP/IP binding (port+listening adddress) and/or the virtual host.
+</p><p>
+ A backend can be configured to execute in a particular working
+ directory. Or the YAZ frontend may perform CQL to RPN conversion, thus
+ allowing traditional Z39.50 backends to be offered as a SRW/SRU
+ service. SRW/SRU Explain information for a particular backend may also
+ be specified.
+</p><p>
+ For the HTTP protocol, the virtual host is specified in the Host header.
+ For the Z39.50 protocol, the virtual host is specified as in the
+ Initialize Request in the OtherInfo, OID 1.2.840.10003.10.1000.81.1.
+</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+  Not all Z39.50 clients allows the VHOST information to be set.
+  For those the selection of the backend must rely on the
+  TCP/IP information alone (port and address).
+ </p></div><p>
+ The YAZ frontend server uses XML to describe the backend
+ configurations. Command-line option <code class="literal">-f</code>
+ specifies filename of the XML configuration.
+</p><p>
+ The configuration uses the root element <code class="literal">yazgfs</code>.
+ This element includes a list of <code class="literal">listen</code> elements,
+ followed by one or more <code class="literal">server</code> elements.
+</p><p>
+ The <code class="literal">listen</code> describes listener (transport end point),
+ such as TCP/IP, Unix file socket or SSL server. Content for
+ a listener:
+ </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">CDATA (required)</span></dt><dd><p>
+     The CDATA for the <code class="literal">listen</code> element holds the
+     listener string, such as <code class="literal">tcp:@:210</code>,
+     <code class="literal">tcp:server1:2100</code>,
+     etc.
+    </p></dd><dt><span class="term">attribute <code class="literal">id</code> (optional)</span></dt><dd><p>
+      identifier for this listener. This may be referred to from
+      server sections.
+     </p></dd></dl></div><p>
+ </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+   We expect more information to be added for the listen section in
+   a future version, such as CERT file for SSL servers.
+  </p></div><p>
+</p><p>
+ The <code class="literal">server</code> describes a server and the parameters
+ for this server type. Content for a server:
+ </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">attribute <code class="literal">id</code> (optional)</span></dt><dd><p>
+     Identifier for this server. Currently not used for anything,
+     but it might be for logging purposes.
+   </p></dd><dt><span class="term">attribute <code class="literal">listenref</code> (optional)</span></dt><dd><p>
+     Specifies one or more listeners for this server. Each server ID is
+     separated by a comma.
+     If this attribute is not given, the server is accessible from all
+     listeners. In order for the server to be used for real, however, the
+     virtual host must match if specified in the configuration.
+    </p></dd><dt><span class="term">element <code class="literal">config</code> (optional)</span></dt><dd><p>
+     Specifies the server configuration. This is equivalent
+     to the config specified using command line option
+     <code class="literal">-c</code>.
+    </p></dd><dt><span class="term">element <code class="literal">directory</code> (optional)</span></dt><dd><p>
+     Specifies a working directory for this backend server. If
+     specifid, the YAZ fronend changes current working directory
+     to this directory whenever a backend of this type is
+     started (backend handler bend_start), stopped (backend handler hand_stop)
+     and initialized (bend_init).
+    </p></dd><dt><span class="term">element <code class="literal">host</code> (optional)</span></dt><dd><p>
+     Specifies the virtual host for this server. If this is specified
+     a client <span class="emphasis"><em>must</em></span> specify this host string in
+     order to use this backend.
+    </p></dd><dt><span class="term">element <code class="literal">cql2rpn</code> (optional)</span></dt><dd><p>
+     Specifies a filename that includes CQL to RPN conversion for this
+     backend server. See <a class="xref" href="tools.html#cql.to.rpn" title="1.3.4. Specification of CQL to RPN mappings">Section 1.3.4, &#8220;Specification of CQL to RPN mappings&#8221;</a>
+     If given, the backend server will only "see" a Type-1/RPN query.
+    </p></dd><dt><span class="term">element <code class="literal">ccl2rpn</code> (optional)</span></dt><dd><p>
+     Specifies a filename that includes CCL to RPN conversion for this
+     backend server. See <a class="xref" href="tools.html#ccl.qualifiers" title="1.2.2. CCL Qualifiers">Section 1.2.2, &#8220;CCL Qualifiers&#8221;</a>
+     If given, the backend server will only "see" a Type-1/RPN query.
+    </p></dd><dt><span class="term">element <code class="literal">stylesheet</code> (optional)</span></dt><dd><p>
+     Specifies the stylesheet reference to be part of SRU HTTP responses
+     when the client does not specify one. If neither this is given, nor
+     the client specifies one, no stylesheet reference is part of the
+     SRU HTTP response.
+    </p></dd><dt><span class="term">element <code class="literal">client_query_charset</code> (optional)</span></dt><dd><p>
+     If specified, a conversion from the character set given to UTF-8 is
+     performed by the generic frontend server. It is only executed for
+     Z39.50 search requests (SRU/Solr are assumed to be UTF-8 encoded already).
+    </p></dd><dt><span class="term">element <code class="literal">docpath</code> (optional)</span></dt><dd><p>
+     Specifies a path for local file access using HTTP. All URLs with
+     a leading prefix (/ exluded) that matches the value of docpath
+     are used for file access. For example, if the server is to offer
+     access in directory <code class="literal">xsl</code>, the docpath would be
+     <code class="literal">xsl</code> and all URLs of the form
+     <code class="literal">http://host/exl</code> will result in a local file access.
+    </p></dd><dt><span class="term">element <code class="literal">explain</code> (optional)</span></dt><dd><p>
+     Specifies SRW/SRU ZeeRex content for this server. Copied verbatim
+     to the client. As things are now, some of the Explain content
+     seeem redundant because host information, etc. is also stored
+     elsewhere.
+    </p></dd><dt><span class="term">element <code class="literal">maximumrecordsize</code> (optional)</span></dt><dd><p>
+     Specifies maximum record size/message size, in bytes. This
+     value also servers as maximum size of <span class="emphasis"><em>incoming</em></span>
+     packages (for Record Updates etc). It's the same value as that
+     given by the <code class="literal">-k</code> option.
+    </p></dd><dt><span class="term">element <code class="literal">retrievalinfo</code> (optional)</span></dt><dd><p>
+     Enables the retrieval facility supporting conversions and
+     specifications of record formats/types.
+     See <a class="xref" href="tools.retrieval.html" title="6. Retrieval Facility">Section 6, &#8220;Retrieval Facility&#8221;</a> for
+     more information.
+    </p></dd></dl></div><p>
+</p><p>
+ The XML below configures a server that accepts connections from
+ two ports, TCP/IP port 9900 and a local UNIX file socket.
+ We name the TCP/IP server <code class="literal">public</code> and the
+ other server <code class="literal">internal</code>.
+ </p><pre class="screen">
+  
+ &lt;yazgfs&gt;
+  &lt;listen id="public"&gt;tcp:@:9900&lt;/listen&gt;
+  &lt;listen id="internal"&gt;unix:/var/tmp/socket&lt;/listen&gt;
+  &lt;server id="server1"&gt;
+    &lt;host&gt;server1.mydomain&lt;/host&gt;
+    &lt;directory&gt;/var/www/s1&lt;/directory&gt;
+    &lt;config&gt;config.cfg&lt;/config&gt;
+  &lt;/server&gt;
+  &lt;server id="server2" listenref="public,internal"&gt;
+    &lt;host&gt;server2.mydomain&lt;/host&gt;
+    &lt;directory&gt;/var/www/s2&lt;/directory&gt;
+    &lt;config&gt;config.cfg&lt;/config&gt;
+    &lt;cql2rpn&gt;../etc/pqf.properties&lt;/cql2rpn&gt;
+    &lt;explain xmlns="http://explain.z3950.org/dtd/2.0/"&gt;
+      &lt;serverInfo&gt;
+        &lt;host&gt;server2.mydomain&lt;/host&gt;
+        &lt;port&gt;9900&lt;/port&gt;
+        &lt;database&gt;a&lt;/database&gt;
+      &lt;/serverInfo&gt;
+    &lt;/explain&gt;
+  &lt;/server&gt;
+  &lt;server id="server3" listenref="internal"&gt;
+    &lt;directory&gt;/var/www/s3&lt;/directory&gt;
+    &lt;config&gt;config.cfg&lt;/config&gt;
+  &lt;/server&gt;
+ &lt;/yazgfs&gt;
+
+ </pre><p>
+ There are three configured backend servers. The first two
+ servers, <code class="literal">"server1"</code> and <code class="literal">"server2"</code>,
+ can be reached by both listener addresses.
+ <code class="literal">"server1"</code> is reached by all (two) since no
+  <code class="literal">listenref</code> attribute is specified.
+ <code class="literal">"server2"</code> is reached by the two listeners specified.
+ In order to distinguish between the two, a virtual host has
+ been specified for each of server in the <code class="literal">host</code>
+ elements.
+</p><p>
+ For <code class="literal">"server2"</code> elements for CQL to RPN conversion
+ is supported and explain information has been added (a short one here
+ to keep the example small).
+</p><p>
+ The third server, <code class="literal">"server3"</code> can only be reached
+ via listener <code class="literal">"internal"</code>.
+</p></div><div class="refsect1"><a name="idp52021280"></a><h2>FILES</h2><p>
+   <code class="filename">yaz-&lt;version&gt;/ztest/yaz-ztest.c</code>
+  </p><p>
+   <code class="filename">yaz-&lt;version&gt;/include/yaz/backend.h</code>
+  </p></div><div class="refsect1"><a name="idp52024064"></a><h2>SEE ALSO</h2><p>
+   <span class="citerefentry"><span class="refentrytitle">yaz</span>(7)</span>
+   <span class="citerefentry"><span class="refentrytitle">yaz-log</span>(7)</span>
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="yaz-client.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="reference.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="yaz-config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">yaz-client </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> yaz-config</td></tr></table></div></body></html>

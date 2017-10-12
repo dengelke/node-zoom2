@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>yaz-json-parse</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="reference.html" title="Reference"><link rel="prev" href="bib1.html" title="Bib-1 Attribute Set"><link rel="next" href="list-oids.html" title="Appendix A. List of Object Identifiers"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">yaz-json-parse</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="bib1.html">Prev</a> </td><th width="60%" align="center">Reference</th><td width="20%" align="right"> <a accesskey="n" href="list-oids.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="yaz-json-parse"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>yaz-json-parse &#8212; YAZ JSON parser</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">yaz-json-parse</code>  [-p]</p></div></div><div class="refsect1"><a name="idp52618784"></a><h2>DESCRIPTION</h2><p>
+   <span class="command"><strong>yaz-json-parse</strong></span> is utility which demonstrates
+   the JSON API of YAZ. (<code class="filename">yaz/json.h</code>).
+  </p><p>
+   The program attempts to parse a JSON from standard input (stdin).
+   It will return exit code 1 if parsing fails and the parsing error message
+   will be printed to standard error (stderr). The program returns exit code
+   0 parsing succeeds and return no output, unless -p is given (see below).
+  </p></div><div class="refsect1"><a name="idp52622032"></a><h2>OPTIONS</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">-p</span></dt><dd><p>
+      Makes the JSON parser echo the JSON result string to standard output -
+      if parsing from stdin was successful. If -p is given twice the
+      output is a multi line output with indentation (pretty print).
+     </p></dd></dl></div></div><div class="refsect1"><a name="idp52624608"></a><h2>SEE ALSO</h2><p>
+   <span class="citerefentry"><span class="refentrytitle">yaz</span>(7)</span>
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="bib1.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="reference.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="list-oids.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Bib-1 Attribute Set </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix A. List of Object Identifiers</td></tr></table></div></body></html>

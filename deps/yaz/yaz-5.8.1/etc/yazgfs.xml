@@ -1,0 +1,54 @@
+<!-- sample YAZ GFS config file .. see 
+  http://www.indexdata.com/yaz/doc/server.vhosts.html -->
+<yazgfs>
+  <listen id="public1">tcp:@:9000</listen>
+  <server id="server1" listenref="public1">
+     <directory>.</directory> <!-- directory where backend is running -->
+     <config>zebra.cfg</config>
+     <cql2rpn>pqf.properties</cql2rpn>
+     <docpath>xsl</docpath>
+     <client_query_charset>iso-8859-1</client_query_charset>
+     <stylesheet>xsl/default.xsl</stylesheet>
+     <maximumrecordsize>2000000</maximumrecordsize>
+     <retrievalinfo>
+       <retrieval syntax="xml" name="zebra::*"/>
+       <retrieval syntax="sutrs" name="zebra::*"/>
+       <retrieval syntax="usmarc" name="F"/>
+       <retrieval syntax="usmarc" name="B"/>
+       <retrieval syntax="xml" name="marcxml"
+		  identifier="info:srw/schema/1/marcxml-v1.1">
+         <backend syntax="usmarc" name="F">
+	   <marc inputformat="marc" outputformat="marcxml"
+		 inputcharset="marc-8"/>
+	 </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="dc">
+         <backend syntax="usmarc" name="F">
+	   <marc inputformat="marc" outputformat="marcxml"
+		 inputcharset="marc-8"/>
+           <xslt stylesheet="MARC21slim2DC.xsl"/>
+	 </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="OP1">
+         <backend syntax="opac" name="F">
+	   <marc inputformat="marc" outputformat="marcxml"
+		 inputcharset="marc-8" outputcharset="utf-8"/>
+	 </backend>
+       </retrieval>
+       <retrieval syntax="opac" name="OP2">
+         <backend syntax="opac" name="F">
+	   <marc inputformat="marc" outputformat="marcxml"
+		 inputcharset="marc-8" outputcharset="utf-8"/>
+	 </backend>
+       </retrieval>
+     </retrievalinfo>
+     <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+        <serverInfo>
+           <host>myserver.org</host>
+           <port>9000</port>
+           <database>Default</database>
+        </serverInfo>
+    </explain>
+  </server>
+</yazgfs>
+ 

@@ -1,0 +1,49 @@
+'\" t
+.\"     Title: yaz-json-parse
+.\"    Author: Index Data
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 01/13/2015
+.\"    Manual: Commands
+.\"    Source: YAZ 5.8.1
+.\"  Language: English
+.\"
+.TH "YAZ\-JSON\-PARSE" "1" "01/13/2015" "YAZ 5.8.1" "Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+yaz-json-parse \- YAZ JSON parser
+.SH "SYNOPSIS"
+.HP \w'\fByaz\-json\-parse\fR\ 'u
+\fByaz\-json\-parse\fR [\-p]
+.SH "DESCRIPTION"
+.PP
+\fByaz\-json\-parse\fR
+is utility which demonstrates the JSON API of YAZ\&. (yaz/json\&.h)\&.
+.PP
+The program attempts to parse a JSON from standard input (stdin)\&. It will return exit code 1 if parsing fails and the parsing error message will be printed to standard error (stderr)\&. The program returns exit code 0 parsing succeeds and return no output, unless \-p is given (see below)\&.
+.SH "OPTIONS"
+.PP
+\-p
+.RS 4
+Makes the JSON parser echo the JSON result string to standard output \- if parsing from stdin was successful\&. If \-p is given twice the output is a multi line output with indentation (pretty print)\&.
+.RE
+.SH "SEE ALSO"
+.PP
+\fByaz\fR(7)

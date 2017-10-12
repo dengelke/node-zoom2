@@ -1,0 +1,825 @@
+'\" t
+.\"     Title: yaz-client
+.\"    Author: Index Data
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 01/13/2015
+.\"    Manual: Commands
+.\"    Source: YAZ 5.8.1
+.\"  Language: English
+.\"
+.TH "YAZ\-CLIENT" "1" "01/13/2015" "YAZ 5.8.1" "Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+yaz-client \- Z39\&.50/SRU client for implementors
+.SH "SYNOPSIS"
+.HP \w'\fByaz\-client\fR\ 'u
+\fByaz\-client\fR [\fB\-a\ \fR\fB\fIapdulog\fR\fR] [\fB\-b\ \fR\fB\fIberdump\fR\fR] [\fB\-c\ \fR\fB\fIcclfile\fR\fR] [\fB\-d\ \fR\fB\fIdump\fR\fR] [\fB\-f\ \fR\fB\fIcmdfile\fR\fR] [\fB\-k\ \fR\fB\fIsize\fR\fR] [\fB\-m\ \fR\fB\fImarclog\fR\fR] [\fB\-p\ \fR\fB\fIproxy\-addr\fR\fR] [\fB\-q\ \fR\fB\fIcqlfile\fR\fR] [\fB\-t\ \fR\fB\fIdispcharset\fR\fR] [\fB\-u\ \fR\fB\fIauth\fR\fR] [\fB\-v\ \fR\fB\fIloglevel\fR\fR] [\fB\-V\fR] [\fB\-x\fR] [server\-addr]
+.SH "DESCRIPTION"
+.PP
+\fByaz\-client\fR
+is a
+\m[blue]\fBZ39\&.50\fR\m[]\&\s-2\u[1]\d\s+2/\m[blue]\fBSRU\fR\m[]\&\s-2\u[2]\d\s+2
+client (origin) with a simple command line interface that allows you to test behavior and performance of Z39\&.50 targets and SRU servers\&.
+.PP
+From YAZ version 4\&.1\&.0
+\fByaz\-client\fR
+may also operate as a
+\m[blue]\fBSolr\fR\m[]\&\s-2\u[3]\d\s+2
+Web Service client\&.
+.PP
+If the
+\fIserver\-addr\fR
+is specified, the client creates a connection to the Z39\&.50/SRU target at the address given\&.
+.PP
+When
+\fByaz\-client\fR
+is started it tries to read commands from one of the following files:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Command file if it is given by option \-f\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\&.yazclientrc
+in current working directory\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\&.yazclientrc
+in the user\*(Aqs home directory\&. The value of the
+HOME
+is used to determine the home directory\&. Normally,
+HOME
+is only set on POSIX systems such as Linux, FreeBSD, Solaris\&.
+.RE
+.sp
+.SH "OPTIONS"
+.PP
+\-a \fIfilename\fR
+.RS 4
+If specified, logging of protocol packages will be appended file given\&. If
+\fIfilename\fR
+is specified as
+\-, the output is written to
+stdout\&.
+.RE
+.PP
+\-b \fIfilename\fR
+.RS 4
+If specified, YAZ will dump BER data in readable notation to the file specified\&. If
+\fIfilename\fR
+is specified as
+\-
+the output is written to
+stdout\&.
+.RE
+.PP
+\-c \fIfilename\fR
+.RS 4
+If specified, CCL configuration will be read from the file given\&.
+.RE
+.PP
+\-d \fIdump\fR
+.RS 4
+If specified, YAZ will dump BER data for all PDUs sent and received to individual files, named
+\fIdump\fR\&.DDD\&.raw, where DDD is 001, 002, 003, \&.\&.
+.RE
+.PP
+\-f \fIcmdfile\fR
+.RS 4
+Reads commands from
+\fIcmdfile\fR\&. When this option is used, YAZ client does not read \&.yazclientrc from current directory or home directory\&.
+.RE
+.PP
+\-k \fIsize\fR
+.RS 4
+Sets preferred messages and maximum record size for Initialize Request in kilobytes\&. Default value is 65536 (64 MB)\&.
+.RE
+.PP
+\-m \fIfilename\fR
+.RS 4
+If specified, retrieved records will be appended to the file given\&.
+.RE
+.PP
+\-p \fIproxy\-addr\fR
+.RS 4
+If specified, the client will use the proxy at the address given\&. YAZ client will connect to a proxy on the address and port given\&. The actual target will be specified as part of the InitRequest to inform the proxy about actual target\&.
+.RE
+.PP
+\-q \fIfilename\fR
+.RS 4
+If specified, CQL configuration will be read from the file given\&.
+.RE
+.PP
+\-t \fIdisplaycharset\fR
+.RS 4
+If displaycharset is given, it specifies name of the character set of the output (on the terminal on which YAZ client is running)\&.
+.RE
+.PP
+\-u \fIauth\fR
+.RS 4
+If specified, the
+\fIauth\fR
+string will be used for authentication\&.
+.RE
+.PP
+\-v \fIlevel\fR
+.RS 4
+Sets the LOG level to
+\fIlevel\fR\&. Level is a sequence of tokens separated by comma\&. Each token is a integer or a named LOG item \- one of
+fatal,
+debug,
+warn,
+log,
+malloc,
+all,
+none\&.
+.RE
+.PP
+\-V
+.RS 4
+Prints YAZ version\&.
+.RE
+.PP
+\-x
+.RS 4
+Makes the YAZ client print hex dumps of packages sent and received on standard output\&.
+.RE
+.SH "COMMANDS"
+.PP
+The YAZ client accepts the following commands\&.
+.PP
+open \fIzurl\fR
+.RS 4
+Opens a connection to a server\&. The syntax for
+\fIzurl\fR
+is the same as described above for connecting from the command line\&.
+.sp
+Syntax:
+.sp
+[(tcp|ssl|unix|http)\*(Aq:\*(Aq]\fIhost\fR
+[:\fIport\fR][/\fIbase\fR]
+.RE
+.PP
+quit
+.RS 4
+Quits YAZ client
+.RE
+.PP
+find \fIquery\fR
+.RS 4
+Sends a Search Request using the
+\fIquery\fR
+given\&. By default the query is assumed to be PQF\&. See command
+querytype
+for more information\&.
+.RE
+.PP
+delete \fIsetname\fR
+.RS 4
+Deletes result set with name
+\fIsetname\fR
+on the server\&.
+.RE
+.PP
+base \fIbase1\fR \fIbase2\fR \&.\&.\&.
+.RS 4
+Sets the name(s) of the database(s) to search\&. One or more databases may be specified separated by blanks\&. This commands overrides the database given in
+\fIzurl\fR\&.
+.RE
+.PP
+show [\fIstart\fR[+\fInumber\fR]]
+.RS 4
+Fetches records by sending a Present Request from the start position given by
+\fIstart\fR
+a number of records given by
+\fInumber\fR\&. If
+\fIstart\fR
+is not given, then the client will fetch from position of the last retrieved record plus 1\&. If
+\fInumber\fR
+is not given, then one record will be fetched at a time\&.
+.RE
+.PP
+scan \fIterm\fR
+.RS 4
+Scans database index for a term\&. The syntax resembles the syntax for
+find\&. If you want to scan for the word
+water
+you could write
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+      scan water
+     
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+but if you want to scan only in, say the title field, you would write
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+      scan @attr 1=4 water
+     
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+setscan \fIset\fR \fIterm\fR
+.RS 4
+Scans database index for a term within a result set\&. This is similar to the scan command but has a result set as its first argument\&.
+.RE
+.PP
+scanpos \fIpos\fR
+.RS 4
+Sets preferred position for scan\&. This value is used in next scan\&. By default position is 1\&.
+.RE
+.PP
+scansize \fIsize\fR
+.RS 4
+Sets number of entries to be returned by scan\&. Default number of entries is 20\&.
+.RE
+.PP
+scanstep \fIstep\fR
+.RS 4
+Set step\-size for scan\&. This value is used in next scan sent to the target\&. By default step\-size is 0\&.
+.RE
+.PP
+sort \fIsortspecs\fR
+.RS 4
+Sorts a result set\&. The sort command takes a sequence of space\-separated sort specifications, with each sort specification consisting of two space\-separated words (so that the whole specification list is made up of an even number of words)\&. The first word of each specification holds a field (sort criterion) and the second holds flags\&. If the sort criterion includes
+=
+it is assumed that the
+SortKey
+is of type
+sortAttributes
+using Bib\-1: in this case the integer before
+=
+is the attribute type and the integer following
+=
+is the attribute value\&. If no
+=
+character is in the criterion, it is treated as a sortfield of type InternationalString\&. The flags word of each sort specification must consist of
+s
+for case sensitive or
+i
+for case insensitive, and
+<
+for ascending order or
+>
+for descending order\&.
+.RE
+.PP
+sort+
+.RS 4
+Same as
+sort
+but stores the sorted result set in a new result set\&.
+.RE
+.PP
+authentication \fIopenauth\fR
+.RS 4
+Sets up a authentication string if a server requires authentication (v2 OpenStyle)\&. The authentication string is first sent to the server when the
+open
+command is issued and the Z39\&.50 Initialize Request is sent, so this command must be used before
+open
+in order to be effective\&. A common convention for the
+\fIauthopen\fR
+string is that the username \- and password is separated by a slash, e\&.g\&.
+myusername/mysecret\&.
+.RE
+.PP
+sru \fImethod\fR \fIversion\fR
+.RS 4
+Selects Web Service method and version\&. Must be one of
+post,
+get,
+soap
+(default) or
+solr\&. Version should be either 1\&.1, 1\&.2 or 2\&.0 for SRU\&. Other versions are allowed \- for testing purposes (version negotiation with SRU server)\&. The version is currently not used for Solr Web Services
+.RE
+.PP
+list_all
+.RS 4
+This command displays status and values for many settings\&.
+.RE
+.PP
+lslb \fIn\fR
+.RS 4
+Sets the limit for when no records should be returned together with the search result\&. See the
+\m[blue]\fBZ39\&.50 standard on set bounds\fR\m[]\&\s-2\u[4]\d\s+2
+for more details\&.
+.RE
+.PP
+ssub \fIn\fR
+.RS 4
+Sets the limit for when all records should be returned with the search result\&. See the
+\m[blue]\fBZ39\&.50 standard on set bounds\fR\m[]\&\s-2\u[4]\d\s+2
+for more details\&.
+.RE
+.PP
+mspn \fIn\fR
+.RS 4
+Sets the number of records should be returned if the number of records in the result set is between the values of
+lslb
+and
+ssub\&. See the
+\m[blue]\fBZ39\&.50 standard on set bounds\fR\m[]\&\s-2\u[4]\d\s+2
+for more details\&.
+.RE
+.PP
+status
+.RS 4
+Displays the values of
+lslb,
+ssub
+and
+mspn\&.
+.RE
+.PP
+setname
+.RS 4
+Switches named result sets on and off\&. Default is on\&.
+.RE
+.PP
+cancel
+.RS 4
+Sends a Trigger Resource Control Request to the target\&.
+.RE
+.PP
+format \fIoid\fR
+.RS 4
+Sets the preferred transfer syntax for retrieved records\&. yaz\-client supports all the record syntaxes that currently are registered\&. See
+\m[blue]\fBZ39\&.50 Record Syntax Identifiers\fR\m[]\&\s-2\u[5]\d\s+2
+for more details\&. Commonly used records syntaxes include usmarc, sutrs and xml\&.
+.RE
+.PP
+elements \fIe\fR
+.RS 4
+Sets the element set name for the records\&. Many targets support element sets are B (for brief) and F (for full)\&.
+.RE
+.PP
+close
+.RS 4
+Sends a Z39\&.50 Close APDU and closes connection with the peer
+.RE
+.PP
+querytype \fItype\fR
+.RS 4
+Sets the query type as used by command
+find\&. The following is supported:
+prefix
+for
+Prefix Query Notation
+(Type\-1 Query);
+ccl
+for CCL search (Type\-2 Query),
+cql
+for CQL (Type\-104 search with CQL OID),
+ccl2rpn
+for
+CCL
+to RPN conversion (Type\-1 Query)\&.
+cql2rpn
+for CQL to RPN conversion (Type\-1 Query)\&.
+.RE
+.PP
+attributeset \fIset\fR
+.RS 4
+Sets attribute set OID for prefix queries (RPN, Type\-1)\&.
+.RE
+.PP
+refid \fIid\fR
+.RS 4
+Sets reference ID for Z39\&.50 Request(s)\&.
+.RE
+.PP
+itemorder \fItype\fR \fIno\fR
+.RS 4
+Sends an Item Order Request using the ILL External\&.
+\fItype\fR
+is either 1 or 2 which corresponds to ILL\-Profile 1 and 2 respectively\&. The
+\fIno\fR
+is the Result Set position of the record to be ordered\&.
+.RE
+.PP
+update \fIaction\fR \fIrecid\fR \fIdoc\fR
+.RS 4
+Sends Item Update Request\&. The
+\fIaction\fR
+argument must be the action type: one of
+insert,
+replace,
+delete
+and
+update\&. The second argument,
+\fIrecid\fR, is the record identifier (any string)\&. Third argument which is optional is the record document for the request\&. If doc is preceded with "<", then the following characters are treated as a filename with the records to be updated\&. Otherwise doc is treated as a document itself\&. The doc may also be quited in double quotes\&. If doc is omitted, the last received record (as part of present response or piggybacked search response) is used for the update\&.
+.RE
+.PP
+source \fIfilename\fR
+.RS 4
+Executes list of commands from file
+\fIfilename\fR, just like source on most UNIX shells\&. A single dot (\&.) can be used as an alternative\&.
+.RE
+.PP
+! \fIargs\fR
+.RS 4
+Executes command
+\fIargs\fR
+in subshell using the
+system
+call\&.
+.RE
+.PP
+push_command \fIcommand\fR
+.RS 4
+The push_command takes another command as its argument\&. That command is then added to the history information (so you can retrieve it later)\&. The command itself is not executed\&. This command only works if you have GNU readline/history enabled\&.
+.RE
+.PP
+set_apdufile \fIfilename\fR
+.RS 4
+Sets that APDU should be logged to file
+\fIfilename\fR\&. Another way to achieve APDU log is by using command\-line option
+\-a\&.
+.RE
+.PP
+set_auto_reconnect \fIflag\fR
+.RS 4
+Specifies whether YAZ client automatically reconnect if target closes connection (Z39\&.50 only)\&.
+.sp
+\fIflag\fR
+must be either
+on
+or
+off\&.
+.RE
+.PP
+set_auto_wait \fIflag\fR
+.RS 4
+Specifies whether YAZ client should wait for response protocol packages after a request\&. By default YAZ client waits (on) for response packages immediately after a command (find, show) has been issued\&. If
+off
+is used, YAZ client does not attempt to receive packages automatically\&. These will have to be manually received when command
+wait_response
+is used\&.
+.sp
+\fIflag\fR
+must be either
+on
+or
+off\&.
+.RE
+.PP
+set_marcdump \fIfilename\fR
+.RS 4
+Specifies that all retrieved records should be appended to file
+\fIfilename\fR\&. This command does the thing as option
+\-m\&.
+.RE
+.PP
+schema \fIschemaid\fR
+.RS 4
+Specifies schema for retrieval\&. Schema may be specified as an OID for Z39\&.50\&. For SRU, schema is a simple string URI\&.
+.RE
+.PP
+charset \fInegotiationcharset\fR [\fIdisplaycharset\fR] [[\fImarccharset\fR]]
+.RS 4
+Specifies character set (encoding) for Z39\&.50 negotiation / SRU encoding and/or character set for output (terminal)\&.
+.sp
+\fInegotiationcharset\fR
+is the name of the character set to be negotiated by the server\&. The special name
+\-
+for
+\fInegotiationcharset\fR
+specifies
+\fIno\fR
+character set to be negotiated\&.
+.sp
+If
+\fIdisplaycharset\fR
+is given, it specifies name of the character set of the output (on the terminal on which YAZ client is running)\&. To disable conversion of characters to the output encoding, the special name
+\-
+(dash) can be used\&. If the special name
+auto
+is given, YAZ client will convert strings to the encoding of the terminal as returned by
+\fBnl_langinfo\fR
+call\&.
+.sp
+If
+\fImarcharset\fR
+is given, it specifies name of the character set of retrieved MARC records from server\&. See also
+marcharset
+command\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBNote\fR
+.ps -1
+.br
+Since character set negotiation takes effect in the Z39\&.50 Initialize Request you should issue this command before command
+open
+is used\&.
+.sp .5v
+.RE
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBNote\fR
+.ps -1
+.br
+MARC records are not covered by Z39\&.50 character set negotiation, so that\*(Aqs why there is a separate character that must be known in order to do meaningful conversion(s)\&.
+.sp .5v
+.RE
+.RE
+.PP
+negcharset \fIcharset\fR
+.RS 4
+Specifies character set for negotiation (Z39\&.50)\&. The argument is the same as second argument for command
+charset\&.
+.RE
+.PP
+displaycharset \fIcharset\fR
+.RS 4
+Specifies character set for output (display)\&. The argument is the same as second argument for command
+charset\&.
+.RE
+.PP
+marccharset \fIcharset\fR
+.RS 4
+Specifies character set for retrieved MARC records so that YAZ client can display them in a character suitable for your display\&. See
+charset
+command\&. If
+auto
+is given, YAZ will assume that MARC21/USMARC is using MARC8/UTF8 and ISO\-8859\-1 for all other MARC variants\&. The charset argument is the same as third argument for command
+charset\&.
+.RE
+.PP
+querycharset \fIcharset\fR
+.RS 4
+Specifies character set for query terms for Z39\&.50 RPN queries and Z39\&.50 Scan Requests (termListAndStartPoint)\&. This is a pure client\-side conversion which converts from displayCharset to queryCharset\&.
+.RE
+.PP
+set_cclfile \fIfilename\fR
+.RS 4
+Specifies that CCL fields should be read from file file
+\fIfilename\fR\&. This command does the thing as option
+\-c\&.
+.RE
+.PP
+set_cqlfile \fIfilename\fR
+.RS 4
+Specifies that CQL fields should be read from file file
+\fIfilename\fR\&. This command does the thing as option
+\-q\&.
+.RE
+.PP
+register_oid \fIname\fR \fIclass\fR \fIOID\fR
+.RS 4
+This command allows you to register your own object identifier \- so that instead of entering a long dot\-notation you can use a short name instead\&. The
+\fIname\fR
+is your name for the OID,
+\fIclass\fR
+is the class, and
+\fIOID\fR
+is the raw OID in dot notation\&. Class is one
+appctx,
+absyn,
+attet,
+transyn,
+diagset,
+recsyn,
+resform,
+accform,
+extserv,
+userinfo,
+elemspec,
+varset,
+schema,
+tagset,
+general\&. If you\*(Aqre in doubt use the
+general
+class\&.
+.RE
+.PP
+register_tab \fIcommand\fR \fIstring\fR
+.RS 4
+This command registers a TAB completion string for the command given\&.
+.RE
+.PP
+sleep \fIseconds\fR
+.RS 4
+This command makes YAZ client sleep (be idle) for the number of seconds given\&.
+.RE
+.PP
+wait_response [ \fInumber\fR]
+.RS 4
+This command makes YAZ client wait for a number of response packages from target\&. If
+\fInumber\fR
+is omitted, 1 is assumed\&.
+.sp
+This command is rarely used and is only useful if command
+set_auto_wait
+is set to off\&.
+.RE
+.PP
+xmles \fIOID\fR \fIdoc\fR
+.RS 4
+Sends XML Extended Services request using the OID and doc given\&.
+.RE
+.PP
+zversion \fIver\fR
+.RS 4
+This command sets Z39\&.50 version for negotiation\&. Should be used before
+open\&. By default 3 (version 3) is used\&.
+.RE
+.PP
+options \fIop1 op2\&.\&.\fR
+.RS 4
+This command sets Z39\&.50 options for negotiation\&. Should be used before
+open\&.
+.sp
+The following options are supported:
+search,
+present,
+delSet,
+resourceReport,
+triggerResourceCtrl,
+resourceCtrl,
+accessCtrl,
+scan,
+sort,
+extendedServices,
+level_1Segmentation,
+level_2Segmentation,
+concurrentOperations,
+namedResultSets,
+encapsulation,
+resultCount,
+negotiationModel,
+duplicationDetection,
+queryType104,
+pQESCorrection,
+stringSchema\&.
+.RE
+.SH "EXAMPLE"
+.PP
+The simplest example of a Prefix Query would be something like
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    f knuth
+   
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+or
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    f "donald knuth"
+   
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+In those queries no attributes was specified\&. This leaves it up to the server what fields to search but most servers will search in all fields\&. Some servers does not support this feature though, and require that some attributes are defined\&. To add one attribute you could do:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    f @attr 1=4 computer
+   
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+where we search in the title field, since the use(1) is title(4)\&. If we want to search in the author field
+\fIand\fR
+in the title field, and in the title field using right truncation it could look something like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    f @and @attr 1=1003 knuth @attr 1=4 @attr 5=1 computer
+   
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Finally using a mix of Bib\-1 and GILS attributes could look something like this:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    f @attrset Bib\-1 @and @attr GILS 1=2008 Washington @attr 1=21 weather
+   
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.SH "FILES"
+.PP
+yaz\-<version>/client/client\&.c
+.PP
+$HOME/\&.yazclientrc
+.PP
+$HOME/\&.yazclient\&.history
+.SH "SEE ALSO"
+.PP
+\fByaz\fR(7)\fBbib1-attr\fR(7)
+.SH "NOTES"
+.IP " 1." 4
+Z39.50
+.RS 4
+\%http://www.loc.gov/z3950/agency/
+.RE
+.IP " 2." 4
+SRU
+.RS 4
+\%http://www.loc.gov/standards/sru/
+.RE
+.IP " 3." 4
+Solr
+.RS 4
+\%http://lucene.apache.org/solr/
+.RE
+.IP " 4." 4
+Z39.50 standard on set bounds
+.RS 4
+\%http://www.loc.gov/z3950/agency/markup/04.html#3.2.2.1.6
+.RE
+.IP " 5." 4
+Z39.50 Record Syntax Identifiers
+.RS 4
+\%http://www.loc.gov/z3950/agency/defns/oids.html#5
+.RE

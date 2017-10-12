@@ -1,0 +1,224 @@
+'\" t
+.\"     Title: yaz-marcdump
+.\"    Author: Index Data
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 01/13/2015
+.\"    Manual: Commands
+.\"    Source: YAZ 5.8.1
+.\"  Language: English
+.\"
+.TH "YAZ\-MARCDUMP" "1" "01/13/2015" "YAZ 5.8.1" "Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+yaz-marcdump \- MARC record dump utility
+.SH "SYNOPSIS"
+.HP \w'\fByaz\-marcdump\fR\ 'u
+\fByaz\-marcdump\fR [\fB\-i\ \fR\fB\fIformat\fR\fR] [\fB\-o\ \fR\fB\fIformat\fR\fR] [\fB\-f\ \fR\fB\fIfrom\fR\fR] [\fB\-t\ \fR\fB\fIto\fR\fR] [\fB\-l\ \fR\fB\fIspec\fR\fR] [\fB\-c\ \fR\fB\fIcfile\fR\fR] [\fB\-s\ \fR\fB\fIprefix\fR\fR] [\fB\-C\ \fR\fB\fIsize\fR\fR] [\fB\-n\fR] [\fB\-p\fR] [\fB\-v\fR] [\fB\-V\fR] [file...]
+.SH "DESCRIPTION"
+.PP
+\fByaz\-marcdump\fR
+reads MARC records from one or more files\&. It parses each record and supports output in line\-format, ISO2709,
+\m[blue]\fBMARCXML\fR\m[]\&\s-2\u[1]\d\s+2,
+\m[blue]\fBMARC\-in\-JSON\fR\m[]\&\s-2\u[2]\d\s+2,
+\m[blue]\fBMarcXchange\fR\m[]\&\s-2\u[3]\d\s+2
+as well as Hex output\&.
+.PP
+This utility parses records ISO2709(raw MARC), line format, MARC\-in\-JSON format as well as XML if that is structured as MARCXML/MarcXchange\&.
+.PP
+MARC\-in\-JSON encoding/decoding is supported in YAZ 5\&.0\&.5 and later\&.
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fBNote\fR
+.ps -1
+.br
+.PP
+As of YAZ 2\&.1\&.18, OAI\-MARC is no longer supported\&. OAI\-MARC is deprecated\&. Use MARCXML instead\&.
+.sp .5v
+.RE
+.PP
+By default, each record is written to standard output in a line format with newline for each field, $x for each subfield x\&. The output format may be changed with option
+\-o,
+.PP
+\fByaz\-marcdump\fR
+can also be requested to perform character set conversion of each record\&.
+.SH "OPTIONS"
+.PP
+\-i \fIformat\fR
+.RS 4
+Specifies input format\&. Must be one of
+marcxml,
+marc
+(ISO2709),
+marcxchange
+(ISO25577),
+line
+(line mode MARC),
+turbomarc
+(Turbo MARC), or
+json
+(MARC\-in\-JSON)\&.
+.RE
+.PP
+\-o \fIformat\fR
+.RS 4
+Specifies output format\&. Must be one of
+marcxml,
+marc
+(ISO2709),
+marcxchange
+(ISO25577),
+line
+(line mode MARC),
+turbomarc
+(Turbo MARC), or
+json
+(MARC\-in\-JSON)\&.
+.RE
+.PP
+\-f \fIfrom\fR
+.RS 4
+Specify the character set
+\fIfrom\fR
+of the input MARC record\&. Should be used in conjunction with option
+\-t\&. Refer to the yaz\-iconv man page for supported character sets\&.
+.RE
+.PP
+\-t \fIto\fR
+.RS 4
+Specify the character set
+\fIof\fR
+of the output\&. Should be used in conjunction with option
+\-f\&. Refer to the yaz\-iconv man page for supported character sets\&.
+.RE
+.PP
+\-l \fIleaderspec\fR
+.RS 4
+Specify a simple modification string for MARC leader\&. The
+\fIleaderspec\fR
+is a list of pos=value pairs, where pos is an integer offset (0 \- 23) for leader\&. Value is either a quoted string or an integer (character value in decimal)\&. Pairs are comma separated\&. For example, to set leader at offset 9 to a, use
+9=\*(Aqa\*(Aq\&.
+.RE
+.PP
+\-s \fIprefix\fR
+.RS 4
+Writes a chunk of records to a separate file with prefix given, i\&.e\&. splits a record batch into files with only at most "chunk" ISO2709 record per file\&. By default chunk is 1 (one record per file)\&. See option
+\-C\&.
+.RE
+.PP
+\-C \fIchunksize\fR
+.RS 4
+Specifies chunk size; to be used conjunction with option
+\-s\&.
+.RE
+.PP
+\-p
+.RS 4
+Makes yaz\-marcdump prints record number and input file offset of each record read\&.
+.RE
+.PP
+\-n
+.RS 4
+MARC output is omitted so that MARC input is only checkecd\&.
+.RE
+.PP
+\-v
+.RS 4
+Writes more information about the parsing process\&. Useful if you have ill\-formatted ISO2709 records as input\&.
+.RE
+.PP
+\-V
+.RS 4
+Prints YAZ version\&.
+.RE
+.SH "EXAMPLES"
+.PP
+The following command converts MARC21/USMARC in MARC\-8 encoding to MARC21/USMARC in UTF\-8 encoding\&. Leader offset 9 is set to \*(Aqa\*(Aq\&. Both input and output records are ISO2709 encoded\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    yaz\-marcdump \-f MARC\-8 \-t UTF\-8 \-o marc \-l 9=97 marc21\&.raw >marc21\&.utf8\&.raw
+   
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+The same records may be converted to MARCXML instead in UTF\-8:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    yaz\-marcdump \-f MARC\-8 \-t UTF\-8 \-o marcxml marc21\&.raw >marcxml\&.xml
+   
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+Turbo MARC is a compact XML notation with same semantics as MARCXML, but which allows for faster processing via XSLT\&. In order to generate Turbo MARC records encoded in UTF\-8 from MARC21 (ISO), one could use:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    yaz\-marcdump \-f MARC8 \-t UTF8 \-o turbomarc \-i marc marc21\&.raw >out\&.xml
+   
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.SH "FILES"
+.PP
+\fIprefix\fR/bin/yaz\-marcdump
+.PP
+\fIprefix\fR/include/yaz/marcdisp\&.h
+.SH "SEE ALSO"
+.PP
+\fByaz\fR(7)
+.PP
+\fByaz-iconv\fR(1)
+.SH "NOTES"
+.IP " 1." 4
+MARCXML
+.RS 4
+\%http://www.loc.gov/standards/marcxml/
+.RE
+.IP " 2." 4
+MARC-in-JSON
+.RS 4
+\%http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/
+.RE
+.IP " 3." 4
+MarcXchange
+.RS 4
+\%http://www.loc.gov/standards/iso25577/
+.RE

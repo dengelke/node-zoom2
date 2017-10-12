@@ -1,0 +1,67 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>yaz-iconv</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="reference.html" title="Reference"><link rel="prev" href="yaz-marcdump.html" title="yaz-marcdump"><link rel="next" href="yaz-log.html" title="yaz-log"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">yaz-iconv</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="yaz-marcdump.html">Prev</a> </td><th width="60%" align="center">Reference</th><td width="20%" align="right"> <a accesskey="n" href="yaz-log.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="yaz-iconv"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>yaz-iconv &#8212; YAZ Character set conversion utility</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">yaz-iconv</code>  [<code class="option">-f <em class="replaceable"><code>from</code></em></code>] [<code class="option">-t <em class="replaceable"><code>to</code></em></code>] [<code class="option">-v</code>] [file...]</p></div></div><div class="refsect1"><a name="idp52323328"></a><h2>DESCRIPTION</h2><p>
+   <span class="command"><strong>yaz-iconv</strong></span> converts data in file in character
+   set specified by <em class="replaceable"><code>from</code></em> to output in
+   character set as specified by <em class="replaceable"><code>to</code></em>.
+  </p><p>
+   This <span class="command"><strong>yaz-iconv</strong></span> utility similar to the
+   <span class="command"><strong>iconv</strong></span> found on many POSIX systems (Glibc, Solaris, etc).
+  </p><p>
+   If no <em class="replaceable"><code>file</code></em> is specified,
+   <span class="command"><strong>yaz-iconv</strong></span> reads from standard input.
+  </p></div><div class="refsect1"><a name="idp52329552"></a><h2>OPTIONS</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">-f<em class="replaceable"><code>from</code></em>]</span></dt><dd><p>
+      Specify the character set <em class="replaceable"><code>from</code></em>
+      of the input file.
+      Should be used in conjunction with option <code class="literal">-t</code>.
+     </p></dd><dt><span class="term">-t<em class="replaceable"><code>to</code></em>]</span></dt><dd><p>
+      Specify the character set <em class="replaceable"><code>of</code></em>
+      of the output.
+      Should be used in conjunction with option <code class="literal">-f</code>.
+     </p></dd><dt><span class="term">-v</span></dt><dd><p>
+      Print more information about the conversion process.
+     </p></dd></dl></div></div><div class="refsect1"><a name="idp52337776"></a><h2>ENCODINGS</h2><p>
+   The yaz-iconv command and the API as defined in
+   <code class="filename">yaz/yaz-iconv.h</code> is a wrapper for the
+   library system call iconv. But YAZ' iconv utility also implements
+   conversions on its own. The table below lists characters sets (or encodings).
+   that are supported by YAZ. Each character set is marked with either
+   <span class="emphasis"><em>encode</em></span> or <span class="emphasis"><em>decode</em></span>. If
+   an encoding is encode-enabled YAZ may convert <span class="emphasis"><em>to</em></span>
+   to the designated encoding. If an encoding is decode-enabled, YAZ
+   may convert <span class="emphasis"><em>from</em></span> the designated encoding.
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">marc8 (encode, decode)</span></dt><dd><p>
+      The <a class="ulink" href="http://www.loc.gov/marc/specifications/speccharmarc8.html" target="_top">MARC8</a> encoding as defined by
+      the Library of Congress. Most MARC21/USMARC records use this encoding.
+     </p></dd><dt><span class="term">marc8s (encode, decode)</span></dt><dd><p>
+      Like MARC8 but with conversion prefers non-combined characters
+      in the Latin-1 plane over combined characters.
+     </p></dd><dt><span class="term">marc8lossy (encode)</span></dt><dd><p>
+      Lossy encoding of MARC-8.
+     </p></dd><dt><span class="term">marc8lossless (encode)</span></dt><dd><p>
+      Lossless encoding of MARC8.
+     </p></dd><dt><span class="term">utf8 (encode, decode)</span></dt><dd><p>
+      The most commonly used UNICODE encoding on the Internet.
+     </p></dd><dt><span class="term">iso8859-1 (encode, decode)</span></dt><dd><p>
+      ISO-8859-1, AKA Latin-1.
+     </p></dd><dt><span class="term">iso5426 (decode)</span></dt><dd><p>
+      ISO 5426. Some MARC records (UNIMARC) use this encoding.
+     </p></dd><dt><span class="term">iso5428:1984 (encode, decode)</span></dt><dd><p>
+      ISO 5428:1984.
+     </p></dd><dt><span class="term">advancegreek (encode, decode)</span></dt><dd><p>
+      An encoding for Greek in use by some vendors (Advance).
+     </p></dd><dt><span class="term">danmarc (decode)</span></dt><dd><p>
+      <a class="ulink" href="http://www.kat-format.dk/danMARC2/Danmarc2.4.htm" target="_top">Danmarc (in danish)</a> is
+      an encoding based on UNICODE which is used for DanMARC2 records.
+     </p></dd></dl></div></div><div class="refsect1"><a name="idp52360128"></a><h2>EXAMPLES</h2><p>
+   The following command converts from ISO-8859-1 (Latin-1) to
+   UTF-8.
+   </p><pre class="screen">
+    yaz-iconv -f ISO-8859-1 -t UTF-8 &lt;input.lst &gt;output.lst
+   </pre><p>
+  </p></div><div class="refsect1"><a name="idp52362032"></a><h2>FILES</h2><p>
+   <code class="filename"><em class="replaceable"><code>prefix</code></em>/bin/yaz-iconv</code>
+  </p><p>
+   <code class="filename"><em class="replaceable"><code>prefix</code></em>/include/yaz/yaz-iconv.h</code>
+  </p></div><div class="refsect1"><a name="idp52365440"></a><h2>SEE ALSO</h2><p>
+   yaz(7)
+   iconv(1)
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="yaz-marcdump.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="reference.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="yaz-log.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">yaz-marcdump </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> yaz-log</td></tr></table></div></body></html>

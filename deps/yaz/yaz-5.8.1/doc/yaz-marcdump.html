@@ -1,0 +1,102 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>yaz-marcdump</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="reference.html" title="Reference"><link rel="prev" href="yaz-asncomp.html" title="yaz-asncomp"><link rel="next" href="yaz-iconv.html" title="yaz-iconv"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">yaz-marcdump</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="yaz-asncomp.html">Prev</a> </td><th width="60%" align="center">Reference</th><td width="20%" align="right"> <a accesskey="n" href="yaz-iconv.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="yaz-marcdump"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>yaz-marcdump &#8212; MARC record dump utility</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">yaz-marcdump</code>  [<code class="option">-i <em class="replaceable"><code>format</code></em></code>] [<code class="option">-o <em class="replaceable"><code>format</code></em></code>] [<code class="option">-f <em class="replaceable"><code>from</code></em></code>] [<code class="option">-t <em class="replaceable"><code>to</code></em></code>] [<code class="option">-l <em class="replaceable"><code>spec</code></em></code>] [<code class="option">-c <em class="replaceable"><code>cfile</code></em></code>] [<code class="option">-s <em class="replaceable"><code>prefix</code></em></code>] [<code class="option">-C <em class="replaceable"><code>size</code></em></code>] [<code class="option">-n</code>] [<code class="option">-p</code>] [<code class="option">-v</code>] [<code class="option">-V</code>] [file...]</p></div></div><div class="refsect1"><a name="idp52258144"></a><h2>DESCRIPTION</h2><p>
+   <span class="command"><strong>yaz-marcdump</strong></span> reads MARC records from one or
+   more files.
+   It parses each record and supports output in line-format,
+   ISO2709,
+   <a class="ulink" href="http://www.loc.gov/standards/marcxml/" target="_top">MARCXML</a>,
+   <a class="ulink" href="http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/" target="_top">MARC-in-JSON</a>,
+   <a class="ulink" href="http://www.loc.gov/standards/iso25577/" target="_top">MarcXchange</a>
+   as well as Hex output.
+  </p><p>
+   This utility parses records ISO2709(raw MARC), line format, MARC-in-JSON
+   format as well as XML if that is structured as MARCXML/MarcXchange.
+  </p><p>
+   MARC-in-JSON encoding/decoding is supported in YAZ 5.0.5 and later.
+  </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+    As of YAZ 2.1.18, OAI-MARC is no longer supported.
+    OAI-MARC is deprecated. Use MARCXML instead.
+   </p></div><p>
+   By default, each record is written to standard output in a line
+   format with newline for each field, $x for each subfield x.
+   The output format may be changed with option <code class="literal">-o</code>,
+  </p><p>
+   <span class="command"><strong>yaz-marcdump</strong></span> can also be requested to perform
+   character set conversion of each record.
+  </p></div><div class="refsect1"><a name="idp52266704"></a><h2>OPTIONS</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">-i <em class="replaceable"><code>format</code></em></span></dt><dd><p>
+      Specifies input format. Must be one of
+      <code class="literal">marcxml</code>, <code class="literal">marc</code> (ISO2709),
+      <code class="literal">marcxchange</code> (ISO25577),
+      <code class="literal">line</code> (line mode MARC),
+      <code class="literal">turbomarc</code> (Turbo MARC),
+      or <code class="literal">json</code> (MARC-in-JSON).
+     </p></dd><dt><span class="term">-o <em class="replaceable"><code>format</code></em></span></dt><dd><p>
+      Specifies output format. Must be one of
+      <code class="literal">marcxml</code>, <code class="literal">marc</code> (ISO2709),
+      <code class="literal">marcxchange</code> (ISO25577),
+      <code class="literal">line</code> (line mode MARC),
+      <code class="literal">turbomarc</code> (Turbo MARC),
+      or <code class="literal">json</code> (MARC-in-JSON).
+     </p></dd><dt><span class="term">-f <em class="replaceable"><code>from</code></em></span></dt><dd><p>
+      Specify the character set <em class="replaceable"><code>from</code></em>
+      of the input MARC record.
+      Should be used in conjunction with option <code class="literal">-t</code>.
+      Refer to the yaz-iconv man page for supported character sets.
+     </p></dd><dt><span class="term">-t <em class="replaceable"><code>to</code></em></span></dt><dd><p>
+      Specify the character set <em class="replaceable"><code>of</code></em>
+      of the output.
+      Should be used in conjunction with option <code class="literal">-f</code>.
+      Refer to the yaz-iconv man page for supported character sets.
+     </p></dd><dt><span class="term">-l <em class="replaceable"><code>leaderspec</code></em></span></dt><dd><p>
+      Specify a simple modification string for MARC leader. The
+      <em class="replaceable"><code>leaderspec</code></em> is a list of pos=value
+      pairs, where pos is an integer offset (0 - 23) for leader. Value
+      is either a quoted string or an integer (character value in decimal).
+      Pairs are comma separated. For example, to set leader at offset 9
+      to a, use <code class="literal">9='a'</code>.
+     </p></dd><dt><span class="term">-s <em class="replaceable"><code>prefix</code></em></span></dt><dd><p>
+      Writes a chunk of records to a separate file with prefix given,
+      i.e. splits a record batch into files with only at most
+      "chunk" ISO2709 record per file. By default chunk is 1 (one record
+      per file). See option <code class="literal">-C</code>.
+     </p></dd><dt><span class="term">-C <em class="replaceable"><code>chunksize</code></em></span></dt><dd><p>
+      Specifies chunk size; to be used conjunction with option
+      <code class="literal">-s</code>.
+     </p></dd><dt><span class="term">-p</span></dt><dd><p>
+      Makes yaz-marcdump prints record number and input file offset
+      of each record read.
+     </p></dd><dt><span class="term">-n</span></dt><dd><p>
+      MARC output is omitted so that MARC input is only checkecd.
+     </p></dd><dt><span class="term">-v</span></dt><dd><p>
+      Writes more information about the parsing process.
+      Useful if you have ill-formatted ISO2709 records as input.
+     </p></dd><dt><span class="term">-V</span></dt><dd><p>
+      Prints YAZ version.
+     </p></dd></dl></div></div><div class="refsect1"><a name="idp52298912"></a><h2>EXAMPLES</h2><p>
+   The following command converts MARC21/USMARC in MARC-8 encoding to
+   MARC21/USMARC in UTF-8 encoding. Leader offset 9 is set to 'a'.
+   Both input and output records are ISO2709 encoded.
+   </p><pre class="screen">
+    yaz-marcdump -f MARC-8 -t UTF-8 -o marc -l 9=97 marc21.raw &gt;marc21.utf8.raw
+   </pre><p>
+  </p><p>
+   The same records may be converted to MARCXML instead in UTF-8:
+   </p><pre class="screen">
+    yaz-marcdump -f MARC-8 -t UTF-8 -o marcxml marc21.raw &gt;marcxml.xml
+   </pre><p>
+  </p><p>
+   Turbo MARC is a compact XML notation with same semantics as
+   MARCXML, but which allows for faster processing via XSLT. In order
+   to generate Turbo MARC records encoded in UTF-8 from MARC21 (ISO), one
+   could use:
+   </p><pre class="screen">
+    yaz-marcdump -f MARC8 -t UTF8 -o turbomarc -i marc marc21.raw &gt;out.xml
+   </pre><p>
+  </p></div><div class="refsect1"><a name="idp52303680"></a><h2>FILES</h2><p>
+   <code class="filename"><em class="replaceable"><code>prefix</code></em>/bin/yaz-marcdump</code>
+  </p><p>
+   <code class="filename"><em class="replaceable"><code>prefix</code></em>/include/yaz/marcdisp.h</code>
+  </p></div><div class="refsect1"><a name="idp52307072"></a><h2>SEE ALSO</h2><p>
+   <span class="citerefentry"><span class="refentrytitle">yaz</span>(7)</span>
+  </p><p>
+   <span class="citerefentry"><span class="refentrytitle">yaz-iconv</span>(1)</span>
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="yaz-asncomp.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="reference.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="yaz-iconv.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">yaz-asncomp </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> yaz-iconv</td></tr></table></div></body></html>

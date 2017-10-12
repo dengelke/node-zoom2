@@ -1,0 +1,147 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>5. MARC</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="tools.html" title="Chapter 7. Supporting Tools"><link rel="prev" href="tools.log.html" title="4. Log"><link rel="next" href="tools.retrieval.html" title="6. Retrieval Facility"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5. MARC</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="tools.log.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Supporting Tools</th><td width="20%" align="right"> <a accesskey="n" href="tools.retrieval.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="marc"></a>5. MARC</h2></div></div></div><p>
+    YAZ provides a fast utility for working with MARC records.
+    Early versions of the MARC utility only allowed decoding of ISO2709.
+    Today the utility may both encode - and decode to a varity of formats.
+   </p><pre class="synopsis">
+    #include &lt;yaz/marcdisp.h&gt;
+
+    /* create handler */
+    yaz_marc_t yaz_marc_create(void);
+    /* destroy */
+    void yaz_marc_destroy(yaz_marc_t mt);
+
+    /* set XML mode YAZ_MARC_LINE, YAZ_MARC_SIMPLEXML, ... */
+    void yaz_marc_xml(yaz_marc_t mt, int xmlmode);
+    #define YAZ_MARC_LINE      0
+    #define YAZ_MARC_SIMPLEXML 1
+    #define YAZ_MARC_OAIMARC   2
+    #define YAZ_MARC_MARCXML   3
+    #define YAZ_MARC_ISO2709   4
+    #define YAZ_MARC_XCHANGE   5
+    #define YAZ_MARC_CHECK     6
+    #define YAZ_MARC_TURBOMARC 7
+    #define YAZ_MARC_JSON      8
+
+    /* supply iconv handle for character set conversion .. */
+    void yaz_marc_iconv(yaz_marc_t mt, yaz_iconv_t cd);
+
+    /* set debug level, 0=none, 1=more, 2=even more, .. */
+    void yaz_marc_debug(yaz_marc_t mt, int level);
+
+    /* decode MARC in buf of size bsize. Returns &gt;0 on success; &lt;=0 on failure.
+    On success, result in *result with size *rsize. */
+    int yaz_marc_decode_buf(yaz_marc_t mt, const char *buf, int bsize,
+                            const char **result, size_t *rsize);
+
+    /* decode MARC in buf of size bsize. Returns &gt;0 on success; &lt;=0 on failure.
+       On success, result in WRBUF */
+    int yaz_marc_decode_wrbuf(yaz_marc_t mt, const char *buf,
+                              int bsize, WRBUF wrbuf);
+
+   </pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+     The synopsis is just a basic subset of all functionality. Refer
+     to the actual header file <code class="filename">marcdisp.h</code> for
+     details.
+    </p></div><p>
+    A MARC conversion handle must be created by using
+    <code class="function">yaz_marc_create</code> and destroyed
+    by calling <code class="function">yaz_marc_destroy</code>.
+   </p><p>
+    All other function operate on a <code class="literal">yaz_marc_t</code> handle.
+    The output is specified by a call to <code class="function">yaz_marc_xml</code>.
+    The <code class="literal">xmlmode</code> must be one of
+    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">YAZ_MARC_LINE</span></dt><dd><p>
+	A simple line-by-line format suitable for display but not
+	recommend for further (machine) processing.
+       </p></dd><dt><span class="term">YAZ_MARC_MARCXML</span></dt><dd><p>
+	<a class="ulink" href="http://www.loc.gov/standards/marcxml/" target="_top">MARCXML</a>.
+       </p></dd><dt><span class="term">YAZ_MARC_ISO2709</span></dt><dd><p>
+	ISO2709 (sometimes just referred to as "MARC").
+       </p></dd><dt><span class="term">YAZ_MARC_XCHANGE</span></dt><dd><p>
+	<a class="ulink" href="http://www.loc.gov/standards/iso25577/" target="_top">MarcXchange</a>.
+       </p></dd><dt><span class="term">YAZ_MARC_CHECK</span></dt><dd><p>
+	Pseudo format for validation only. Does not generate
+	any real output except diagnostics.
+       </p></dd><dt><span class="term">YAZ_MARC_TURBOMARC</span></dt><dd><p>
+	XML format with same semantics as MARCXML but more compact
+	and geared towards fast processing with XSLT. Refer to
+	<a class="xref" href="marc.html#tools.turbomarc" title="5.1. TurboMARC">Section 5.1, &#8220;TurboMARC&#8221;</a> for more information.
+       </p></dd><dt><span class="term">YAZ_MARC_JSON</span></dt><dd><p>
+        <a class="ulink" href="http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/" target="_top">MARC-in_JSON</a> format.
+       </p></dd></dl></div><p>
+   </p><p>
+    The actual conversion functions are
+    <code class="function">yaz_marc_decode_buf</code> and
+    <code class="function">yaz_marc_decode_wrbuf</code> which decodes and encodes
+    a MARC record. The former function operates on simple buffers, the
+    stores the resulting record in a WRBUF handle (WRBUF is a simple string
+    type).
+   </p><div class="example"><a name="example.marc.display"></a><p class="title"><b>Example 7.18. Display of MARC record</b></p><div class="example-contents"><p>
+     The following program snippet illustrates how the MARC API may
+     be used to convert a MARC record to the line-by-line format:
+     </p><pre class="programlisting">
+      void print_marc(const char *marc_buf, int marc_buf_size)
+      {
+         char *result;      /* for result buf */
+         size_t result_len;    /* for size of result */
+         yaz_marc_t mt = yaz_marc_create();
+         yaz_marc_xml(mt, YAZ_MARC_LINE);
+         yaz_marc_decode_buf(mt, marc_buf, marc_buf_size,
+                             &amp;result, &amp;result_len);
+         fwrite(result, result_len, 1, stdout);
+         yaz_marc_destroy(mt);  /* note that result is now freed... */
+      }
+
+     </pre><p>
+    </p></div></div><br class="example-break"><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="tools.turbomarc"></a>5.1. TurboMARC</h3></div></div></div><p>
+     TurboMARC is yet another XML encoding of a MARC record. The format
+     was designed for fast processing with XSLT.
+    </p><p>
+     Applications like
+     Pazpar2 uses XSLT to convert an XML encoded MARC record to an internal
+     representation. This conversion mostly check the tag of a MARC field
+     to determine the basic rules in the conversion. This check is
+     costly when that is tag is encoded as an attribute in MARCXML.
+     By having the tag value as the element instead, makes processing
+     many times faster (at least for Libxslt).
+    </p><p>
+     TurboMARC is encoded as follows:
+     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+	Record elements is part of namespace
+	"<code class="literal">http://www.indexdata.com/turbomarc</code>".
+      </p></li><li class="listitem"><p>
+	A record is enclosed in element <code class="literal">r</code>.
+      </p></li><li class="listitem"><p>
+	A collection of records is enclosed in element
+	<code class="literal">collection</code>.
+       </p></li><li class="listitem"><p>
+	The leader is encoded as element <code class="literal">l</code> with the
+	leader content as its (text) value.
+      </p></li><li class="listitem"><p>
+	A control field is encoded as element <code class="literal">c</code> concatenated
+	with the tag value of the control field if the tag value
+	matches the regular expression <code class="literal">[a-zA-Z0-9]*</code>.
+	If the tag value do not match the regular expression
+	<code class="literal">[a-zA-Z0-9]*</code> the control field is encoded
+	as element <code class="literal">c</code> and attribute <code class="literal">code</code>
+	will hold the tag value.
+	This rule ensure that in the rare cases where a tag value might
+	result in a non-wellformed XML YAZ encode it as a coded	attribute
+	(as in MARCXML).
+       </p><p>
+	The control field content is the the text value of this element.
+	Indicators are encoded as attribute names
+	<code class="literal">i1</code>, <code class="literal">i2</code>, etc.. and
+	corresponding values for each indicator.
+       </p></li><li class="listitem"><p>
+	A data field is encoded as element <code class="literal">d</code> concatenated
+	with the tag value of the data field or using the attribute
+	<code class="literal">code</code> as described in the rules for control fields.
+	The children of the data field element is subfield elements.
+	Each subfield element is encoded as <code class="literal">s</code>
+	concatenated with the sub field code.
+	The text of the subfield element is the contents of the subfield.
+	Indicators are encoded as attributes for the data field element similar
+	to the encoding for control fields.
+      </p></li></ul></div><p>
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tools.log.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="tools.retrieval.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">4. Log </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 6. Retrieval Facility</td></tr></table></div></body></html>

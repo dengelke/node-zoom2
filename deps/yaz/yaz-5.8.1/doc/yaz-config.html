@@ -1,0 +1,35 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>yaz-config</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="reference.html" title="Reference"><link rel="prev" href="yaz-ztest.html" title="yaz-ztest"><link rel="next" href="yaz.html" title="yaz"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">yaz-config</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="yaz-ztest.html">Prev</a> </td><th width="60%" align="center">Reference</th><td width="20%" align="right"> <a accesskey="n" href="yaz.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="yaz-config"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>yaz-config &#8212; Script to get information about YAZ.</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">yaz-config</code>  [<code class="option">--prefix[=<em class="replaceable"><code>DIR</code></em>]</code>] [<code class="option">--version</code>] [<code class="option">--libs</code>] [<code class="option">--lalibs</code>] [<code class="option">--cflags</code>] [<code class="option">--include</code>] [<code class="option">--comp</code>] [<code class="option">-V</code>] [libraries...]</p></div></div><div class="refsect1"><a name="idp52045232"></a><h2>DESCRIPTION</h2><p>
+   <span class="command"><strong>yaz-config</strong></span> is a script that returns information
+   that your own software should use to build software that uses YAZ.
+  </p><p>
+   The following libraries are supported:
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">threads</span></dt><dd><p>
+      Use the threaded version of YAZ.
+     </p></dd></dl></div></div><div class="refsect1"><a name="idp52049312"></a><h2>OPTIONS</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">--prefix[=<em class="replaceable"><code>DIR</code></em>]</span></dt><dd><p>
+      Returns prefix of YAZ or assume a different one if DIR is
+      specified.
+     </p></dd><dt><span class="term">--version</span></dt><dd><p>
+      Returns version of YAZ.
+     </p></dd><dt><span class="term">--libs</span></dt><dd><p>
+      Library specification be used when using YAZ.
+     </p></dd><dt><span class="term">--lalibs</span></dt><dd><p>
+      Return library specification.
+     </p></dd><dt><span class="term">--cflags</span></dt><dd><p>
+      Return C Compiler flags.
+     </p></dd><dt><span class="term">--include</span></dt><dd><p>
+      Return C compiler includes for YAZ header files (-Ipath).
+     </p></dd><dt><span class="term">--comp</span></dt><dd><p>
+      Returns full path to YAZ' ASN.1 compiler: yaz-asncomp.
+     </p></dd><dt><span class="term">-V</span></dt><dd><p>
+      veturns YAZ SHA1 ID (from Git) and version.
+     </p></dd></dl></div></div><div class="refsect1"><a name="idp52061792"></a><h2>FILES</h2><p>
+   <code class="filename">/usr/bin/yaz-config</code>
+  </p><p>
+   <code class="filename">/usr/lib/libyaz*.a</code>
+  </p><p>
+   <code class="filename">/usr/include/yaz/*.h</code>
+  </p></div><div class="refsect1"><a name="idp52065680"></a><h2>SEE ALSO</h2><p>
+   yaz(7)
+  </p><p>
+   Section "How to make apps using YAZ on UNIX" in the YAZ manual.
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="yaz-ztest.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="reference.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="yaz.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">yaz-ztest </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> yaz</td></tr></table></div></body></html>

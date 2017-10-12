@@ -1,0 +1,49 @@
+# CQL queries for testing.
+# Read by test_cql2pqf.sh
+# No blank lines!
+#
+# Simple Term
+a
+a b
+"a b"
+# Index Relation Term
+title = fish
+dc.title = fish
+# Simple Boolean
+cat or dog
+cat and fish
+cat not frog
+(cat not frog)
+"cat" not "fish food"
+xml and "prox///"
+fred and any
+((fred or all))
+a or b and c not d 
+# Masking/Truncation
+*a
+a*
+*a*
+a*a
+?a
+a?
+?a?
+a?a
+a#a?
+*a#
+a#a*
+a*3
+# Escape sequences (sh reads one slash, though)
+a*\\3
+\\*a#
+\\*a*b#
+\\"
+@and
+a^
+^a
+^a^
+\\^
+^a\\^
+# masking modifiers
+dc.title=/unmasked a*b
+dc.title=/masked a*b
+dc.title=/regexp a.*b

@@ -1,0 +1,13 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.{js,json,gyp,yaml}]
+indent_style = space
+indent_size = 2
+
+[*.{c,h,cc}]
+indent_style = space
+indent_size = 4

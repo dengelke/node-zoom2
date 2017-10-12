@@ -1,0 +1,61 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>7. Sorting</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="tools.html" title="Chapter 7. Supporting Tools"><link rel="prev" href="tools.retrieval.html" title="6. Retrieval Facility"><link rel="next" href="facets.html" title="8. Facets"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">7. Sorting</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="tools.retrieval.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Supporting Tools</th><td width="20%" align="right"> <a accesskey="n" href="facets.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sorting"></a>7. Sorting</h2></div></div></div><p>
+    This chapter describes sorting and how it is supported in YAZ.
+    Sorting applies to a result-set.
+    The
+    <a class="ulink" href="http://www.loc.gov/z3950/agency/markup/05.html#3.2.7" target="_top">
+     Z39.50 sorting facility
+    </a>
+    takes one or more input result-sets
+    and one result-set as output. The most simple case is that
+    the input-set is the same as the output-set.
+   </p><p>
+    Z39.50 sorting has a separate APDU (service) that is, thus, performed
+    following a search (two phases).
+   </p><p>
+    In SRU/Solr, however, the model is different. Here, sorting is specified
+    during the the search operation. Note, however, that SRU might
+    perform sort as separate search, by referring to an existing result-set
+    in the query (result-set reference).
+   </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp50992096"></a>7.1. Using the Z39.50 sort service</h3></div></div></div><p>
+     yaz-client and the ZOOM API supports the Z39.50 sort facility. In any
+     case the sort sequence or sort critiera is using a string notation.
+     This notation is a one-line notation suitable for being manually
+     entered or generated and allows for easy logging (one liner).
+     For the ZOOM API, the sort is specified in the call to ZOOM_query_sortby
+     function. For yaz-client the sort is performed and specified using
+     the sort and sort+ commands. For description of the sort criteria notation
+     refer to the <a class="link" href="yaz-client.html#sortspec">sort command</a> in the
+     yaz-client manual.
+    </p><p>
+     The ZOOM API might choose one of several sort strategies for
+     sorting. Refer to <a class="xref" href="zoom.query.html#zoom-sort-strategy" title="Table 3.2. ZOOM sort strategy">Table 3.2, &#8220;ZOOM sort strategy&#8221;</a>.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp50995920"></a>7.2. Type-7 sort</h3></div></div></div><p>
+     Type-7 sort is an extension to the Bib-1 based RPN query where the
+     sort specification is embedded as an Attribute-Plus-Term.
+    </p><p>
+     The objectives for introducing Type-7 sorting is that it allows
+     a client to perform sorting even if it does not implement/support
+     Z39.50 sort. Virtually all Z39.50 client software supports
+     RPN queries. It also may improve performance because the sort
+     critieria is specified along with the search query.
+    </p><p>
+     The sort is triggered by the presence of type 7 and the value of type 7
+     specifies the
+     <a class="ulink" href="http://www.loc.gov/z3950/agency/asn1.html#SortKeySpec" target="_top">
+      sortRelation
+     </a>
+     The value for type 7 is 1 for ascending and 2 for descending.
+     For the
+     <a class="ulink" href="http://www.loc.gov/z3950/agency/asn1.html#SortElement" target="_top">
+      sortElement
+     </a>
+     only the generic part is handled. If generic sortKey is of type
+     sortField, then attribute type 1 is present and the value is
+     sortField (InternationalString). If generic sortKey is of type
+     sortAttributes, then the attributes in list is used . generic sortKey
+     of type elementSpec is not supported.
+    </p><p>
+     The term in the sorting Attribute-Plus-Term combo should hold
+     an integer. The value is 0 for primary sorting criteria, 1 for second
+     criteria, etc.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tools.retrieval.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="tools.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="facets.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">6. Retrieval Facility </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 8. Facets</td></tr></table></div></body></html>

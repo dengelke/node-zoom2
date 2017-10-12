@@ -1,0 +1,6 @@
+<icu_chain locale="en">
+  <transliterate>
+[,. -]* } [$] > ; 
+ </transliterate>
+</icu_chain>
+

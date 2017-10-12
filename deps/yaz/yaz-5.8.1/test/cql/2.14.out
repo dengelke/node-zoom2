@@ -1,0 +1,17 @@
+<searchClause>
+  <index>creator</index>
+  <relation>
+    <value>any</value>
+    <modifiers>
+      <modifier>
+        <type>b.bar</type>
+        <comparison>&gt;</comparison>
+        <value>1</value>
+      </modifier>
+      <modifier>
+        <type>f.foo</type>
+      </modifier>
+    </modifiers>
+  </relation>
+  <term>sanderson taylor</term>
+</searchClause>

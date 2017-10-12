@@ -1,0 +1,162 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>yaz-log</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="reference.html" title="Reference"><link rel="prev" href="yaz-iconv.html" title="yaz-iconv"><link rel="next" href="yaz-illclient.html" title="yaz-illclient"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">yaz-log</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="yaz-iconv.html">Prev</a> </td><th width="60%" align="center">Reference</th><td width="20%" align="right"> <a accesskey="n" href="yaz-illclient.html">Next</a></td></tr></table><hr></div><div class="refentry"><a name="yaz-log"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>yaz-log &#8212; Log handling in all yaz-based programs</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">yaz-XXXX</code>  [<code class="option">-v <em class="replaceable"><code>loglevel,...</code></em></code>] [<code class="option">-l <em class="replaceable"><code>logfile</code></em></code>]</p></div></div><div class="refsect1"><a name="idp52377136"></a><h2>DESCRIPTION</h2><p>
+   All YAZ-based programs use a common log subsystem, and should support
+   common command line options for controlling it. This man page documents
+   those.
+  </p><p>
+  </p></div><div class="refsect1"><a name="idp52378752"></a><h2>OPTIONS</h2><div class="variablelist"><dl class="variablelist"><dt><span class="term">-l<em class="replaceable"><code> logfile</code></em></span></dt><dd><p>
+      Specify the file where the log is to be written. If none is specified,
+      <code class="filename">stderr</code> is used. The log is appended to this file.
+      If the file grows overly large, it is silently rotated: It is renamed to
+      <em class="replaceable"><code>logfile</code></em>.1,
+      <em class="replaceable"><code>logfile</code></em>.2, .., 9
+      (old such file is deleted), and a
+      new file is opened. The limit defaults to 1GB, but can be set by the
+      program.
+      The rotating limit can be specified with option <code class="literal">-r</code>
+      for the YAZ frontend server (yaz-ztest).
+     </p><p>
+      Rotation can also be implicitly enabled by using a filename
+      which gets changed for a given date, due to substitutions as
+      given by the strftime(3) function.
+     </p></dd><dt><span class="term">-v<em class="replaceable"><code> loglevel</code></em></span></dt><dd><p>
+      Specify the logging level. The argument is a set of log level names,
+      separated by commas (no whitespace!), optionally preceded by a '-' to
+      negate that level. Most programs have their own default, often
+      containing <code class="literal">fatal,warn,log</code>, and some
+      application-specific values. The default list can be cleared with the
+      word <code class="literal">none</code>, or individual bits can be removed by
+      prefixing them with a dash '-'.
+     </p></dd></dl></div></div><div class="refsect1"><a name="idp52388432"></a><h2>LOG LEVELS TO CONTROL LOGGING</h2><p>
+   Some of the log levels control the way the log is written.
+  </p><p>
+   <code class="literal">flush</code> causes the log to be flushed after every write.
+   This can have serious implications to performance, and should not be used
+   in production. On the other hand, when debugging a program crash, this can
+   be extremely useful. The option <code class="literal">debug</code> implies
+   <code class="literal">flush</code> as well.
+  </p><p>
+   <code class="literal">notime</code> prevents the writing of time stamps. This is
+   intended for automatic test scripts, which should produce predictable log
+   files that are easy to compare.
+  </p></div><div class="refsect1"><a name="idp52393600"></a><h2>GENERAL LOG LEVELS IN YAZ ITSELF</h2><p>
+   YAZ itself uses the following log levels:
+  </p><p>
+   <code class="literal">fatal</code> for fatal errors, that prevent further execution
+   of the program.
+  </p><p>
+   <code class="literal">warn</code> for warnings about things that should be corrected.
+  </p><p>
+   <code class="literal">debug</code> for debugging. This flag may be used temporarily
+   when developing or debugging yaz, or a program that uses yaz. It is
+   practically deprecated, you should be defining and using your own log
+   levels (see below).
+  </p><p>
+   <code class="literal">all</code> turns on almost all hard-coded log levels.
+  </p><p>
+   <code class="literal">loglevel</code> logs information about the log levels used by
+   the program. Every time the log level is changed, lists all bits that are
+   on. Every time a module asks for its log bits, this is logged. This can be
+   used for getting an idea of what log levels are available in any program
+   that uses yaz-log. Start the program with <code class="literal">-v
+   none,loglevel</code>, and do some common operations with it. Another way
+   is to grep for <code class="function">yaz_log_module_level</code> in the source
+   code, as in
+   </p><pre class="screen">
+      find . -name '*.[ch]' -print |
+         xargs grep yaz_log_module_level |
+         grep '"' |
+         cut -d'"' -f2 |
+         sort -u
+   </pre><p>
+  </p><p>
+   <code class="literal">eventl</code>, <code class="literal">malloc</code>,
+   <code class="literal">nmem</code>, <code class="literal">odr</code> are used internally for
+   debugging yaz.
+  </p><p>
+  </p></div><div class="refsect1"><a name="idp52406752"></a><h2>LOG LEVELS FOR CLIENTS</h2><p>
+   <code class="literal">zoom</code> logs the calls to the zoom API, which may be useful
+   in debugging client applications.
+  </p></div><div class="refsect1"><a name="idp52408608"></a><h2>LOG LEVELS FOR SERVERS</h2><p>
+   <code class="literal">server</code> logs the server functions on a high level,
+   starting up, listening on a port, etc.
+  </p><p>
+   <code class="literal">session</code> logs individual sessions (connections).
+  </p><p>
+   <code class="literal">request</code> logs a one-liner for each request (init, search,
+   etc).
+  </p><p>
+   <code class="literal">requestdetail</code> logs the details of every request, before
+   it is passed to the back-end, and the results received from it.
+  </p><p>
+   Each server program (zebra, etc) is supposed to define its own log levels
+   in addition to these. As they depend on the server in question, they can
+   not be described here. See above how to find out about them.
+  </p></div><div class="refsect1"><a name="idp52414576"></a><h2>LOGGING EXAMPLES</h2><p>
+   See what log levels yaz-ztest is using:
+   </p><pre class="screen">
+    yaz-ztest -1 -v none,loglevel
+    14:43:29-23/11 [loglevel] Setting log level to 4096 = 0x00001000
+    14:43:29-23/11 [loglevel] Static  log bit 00000001 'fatal' is off
+    14:43:29-23/11 [loglevel] Static  log bit 00000002 'debug' is off
+    14:43:29-23/11 [loglevel] Static  log bit 00000004 'warn' is off
+    14:43:29-23/11 [loglevel] Static  log bit 00000008 'log' is off
+    14:43:29-23/11 [loglevel] Static  log bit 00000080 'malloc' is off
+    14:43:29-23/11 [loglevel] Static  log bit 00000800 'flush' is off
+    14:43:29-23/11 [loglevel] Static  log bit 00001000 'loglevel' is ON
+    14:43:29-23/11 [loglevel] Static  log bit 00002000 'server' is off
+    14:43:29-23/11 [loglevel] Dynamic log bit 00004000 'session' is off
+    14:43:29-23/11 [loglevel] Dynamic log bit 00008000 'request' is off
+    14:44:13-23/11 yaz-ztest [loglevel] returning log bit 0x4000 for 'session'
+    14:44:13-23/11 yaz-ztest [loglevel] returning log bit 0x2000 for 'server'
+    14:44:13-23/11 yaz-ztest [loglevel] returning NO log bit for 'eventl'
+    14:44:20-23/11 yaz-ztest [loglevel] returning log bit 0x4000 for 'session'
+    14:44:20-23/11 yaz-ztest [loglevel] returning log bit 0x8000 for 'request'
+    14:44:20-23/11 yaz-ztest [loglevel] returning NO log bit for 'requestdetail'
+    14:44:20-23/11 yaz-ztest [loglevel] returning NO log bit for 'odr'
+    14:44:20-23/11 yaz-ztest [loglevel] returning NO log bit for 'ztest'
+   </pre><p>
+  </p><p>
+   See the details of the requests for yaz-ztest
+   </p><pre class="screen">
+   ./yaz-ztest -1 -v requestdetail
+   14:45:35-23/11 yaz-ztest [server] Adding static Z3950 listener on tcp:@:9999
+   14:45:35-23/11 yaz-ztest [server] Starting server ./yaz-ztest pid=32200
+   14:45:38-23/11 yaz-ztest [session] Starting session from tcp:127.0.0.1 (pid=32200)
+   14:45:38-23/11 yaz-ztest [requestdetail] Got initRequest
+   14:45:38-23/11 yaz-ztest [requestdetail] Id:        81
+   14:45:38-23/11 yaz-ztest [requestdetail] Name:      YAZ
+   14:45:38-23/11 yaz-ztest [requestdetail] Version:   2.0.28
+   14:45:38-23/11 yaz-ztest [requestdetail] Negotiated to v3: srch prst del extendedServices namedresults scan sort
+   14:45:38-23/11 yaz-ztest [request] Init from 'YAZ' (81) (ver 2.0.28) OK
+   14:45:39-23/11 yaz-ztest [requestdetail] Got SearchRequest.
+   14:45:39-23/11 yaz-ztest [requestdetail] ResultSet '1'
+   14:45:39-23/11 yaz-ztest [requestdetail] Database 'Default'
+   14:45:39-23/11 yaz-ztest [requestdetail] RPN query. Type: Bib-1
+   14:45:39-23/11 yaz-ztest [requestdetail]  term 'foo' (general)
+   14:45:39-23/11 yaz-ztest [requestdetail] resultCount: 7
+   14:45:39-23/11 yaz-ztest [request] Search Z: @attrset Bib-1 foo  OK:7 hits
+   14:45:41-23/11 yaz-ztest [requestdetail] Got PresentRequest.
+   14:45:41-23/11 yaz-ztest [requestdetail] Request to pack 1+1 1
+   14:45:41-23/11 yaz-ztest [requestdetail] pms=1048576, mrs=1048576
+   14:45:41-23/11 yaz-ztest [request] Present: [1] 1+1  OK 1 records returned
+   </pre><p>
+  </p></div><div class="refsect1"><a name="idp52421776"></a><h2>LOG FILENAME EXAMPLES</h2><p>
+   A file with format my_YYYYMMDD.log is where Y, M, D is year, month, and day
+   digits is given as follows
+   <code class="literal">-l my_%Y%m%d.log</code> . And since the filename
+   is depending on day, rotaion will occur on midnight.
+  </p><p>
+   A weekly log could be specified as
+   <code class="literal">-l my_%Y%U.log</code>.
+  </p></div><div class="refsect1"><a name="idp52424912"></a><h2>FILES</h2><p>
+   <code class="filename"><em class="replaceable"><code>prefix</code></em>/include/yaz/log.h</code>
+   <code class="filename"><em class="replaceable"><code>prefix</code></em>/src/log.c</code>
+  </p></div><div class="refsect1"><a name="idp52427920"></a><h2>SEE ALSO</h2><p>
+   <span class="citerefentry"><span class="refentrytitle">yaz</span>(7)</span>
+
+   <span class="citerefentry"><span class="refentrytitle">yaz-ztest</span>(8)</span>
+
+   <span class="citerefentry"><span class="refentrytitle">yaz-client</span>(1)</span>
+
+   <span class="citerefentry"><span class="refentrytitle">strftime</span>(3)</span>
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="yaz-iconv.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="reference.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="yaz-illclient.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">yaz-iconv </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> yaz-illclient</td></tr></table></div></body></html>

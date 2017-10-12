@@ -1,0 +1,174 @@
+'\" t
+.\"     Title: yaz-iconv
+.\"    Author: Index Data
+.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
+.\"      Date: 01/13/2015
+.\"    Manual: Commands
+.\"    Source: YAZ 5.8.1
+.\"  Language: English
+.\"
+.TH "YAZ\-ICONV" "1" "01/13/2015" "YAZ 5.8.1" "Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+yaz-iconv \- YAZ Character set conversion utility
+.SH "SYNOPSIS"
+.HP \w'\fByaz\-iconv\fR\ 'u
+\fByaz\-iconv\fR [\fB\-f\ \fR\fB\fIfrom\fR\fR] [\fB\-t\ \fR\fB\fIto\fR\fR] [\fB\-v\fR] [file...]
+.SH "DESCRIPTION"
+.PP
+\fByaz\-iconv\fR
+converts data in file in character set specified by
+\fIfrom\fR
+to output in character set as specified by
+\fIto\fR\&.
+.PP
+This
+\fByaz\-iconv\fR
+utility similar to the
+\fBiconv\fR
+found on many POSIX systems (Glibc, Solaris, etc)\&.
+.PP
+If no
+\fIfile\fR
+is specified,
+\fByaz\-iconv\fR
+reads from standard input\&.
+.SH "OPTIONS"
+.PP
+\-f\fIfrom\fR]
+.RS 4
+Specify the character set
+\fIfrom\fR
+of the input file\&. Should be used in conjunction with option
+\-t\&.
+.RE
+.PP
+\-t\fIto\fR]
+.RS 4
+Specify the character set
+\fIof\fR
+of the output\&. Should be used in conjunction with option
+\-f\&.
+.RE
+.PP
+\-v
+.RS 4
+Print more information about the conversion process\&.
+.RE
+.SH "ENCODINGS"
+.PP
+The yaz\-iconv command and the API as defined in
+yaz/yaz\-iconv\&.h
+is a wrapper for the library system call iconv\&. But YAZ\*(Aq iconv utility also implements conversions on its own\&. The table below lists characters sets (or encodings)\&. that are supported by YAZ\&. Each character set is marked with either
+\fIencode\fR
+or
+\fIdecode\fR\&. If an encoding is encode\-enabled YAZ may convert
+\fIto\fR
+to the designated encoding\&. If an encoding is decode\-enabled, YAZ may convert
+\fIfrom\fR
+the designated encoding\&.
+.PP
+marc8 (encode, decode)
+.RS 4
+The
+\m[blue]\fBMARC8\fR\m[]\&\s-2\u[1]\d\s+2
+encoding as defined by the Library of Congress\&. Most MARC21/USMARC records use this encoding\&.
+.RE
+.PP
+marc8s (encode, decode)
+.RS 4
+Like MARC8 but with conversion prefers non\-combined characters in the Latin\-1 plane over combined characters\&.
+.RE
+.PP
+marc8lossy (encode)
+.RS 4
+Lossy encoding of MARC\-8\&.
+.RE
+.PP
+marc8lossless (encode)
+.RS 4
+Lossless encoding of MARC8\&.
+.RE
+.PP
+utf8 (encode, decode)
+.RS 4
+The most commonly used UNICODE encoding on the Internet\&.
+.RE
+.PP
+iso8859\-1 (encode, decode)
+.RS 4
+ISO\-8859\-1, AKA Latin\-1\&.
+.RE
+.PP
+iso5426 (decode)
+.RS 4
+ISO 5426\&. Some MARC records (UNIMARC) use this encoding\&.
+.RE
+.PP
+iso5428:1984 (encode, decode)
+.RS 4
+ISO 5428:1984\&.
+.RE
+.PP
+advancegreek (encode, decode)
+.RS 4
+An encoding for Greek in use by some vendors (Advance)\&.
+.RE
+.PP
+danmarc (decode)
+.RS 4
+\m[blue]\fBDanmarc (in danish)\fR\m[]\&\s-2\u[2]\d\s+2
+is an encoding based on UNICODE which is used for DanMARC2 records\&.
+.RE
+.SH "EXAMPLES"
+.PP
+The following command converts from ISO\-8859\-1 (Latin\-1) to UTF\-8\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+    yaz\-iconv \-f ISO\-8859\-1 \-t UTF\-8 <input\&.lst >output\&.lst
+   
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.SH "FILES"
+.PP
+\fIprefix\fR/bin/yaz\-iconv
+.PP
+\fIprefix\fR/include/yaz/yaz\-iconv\&.h
+.SH "SEE ALSO"
+.PP
+yaz(7) iconv(1)
+.SH "NOTES"
+.IP " 1." 4
+MARC8
+.RS 4
+\%http://www.loc.gov/marc/specifications/speccharmarc8.html
+.RE
+.IP " 2." 4
+Danmarc (in danish)
+.RS 4
+\%http://www.kat-format.dk/danMARC2/Danmarc2.4.htm
+.RE

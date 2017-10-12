@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>9. Query conversions</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="YAZ User's Guide and Reference"><link rel="up" href="zoom.html" title="Chapter 3. ZOOM"><link rel="prev" href="zoom.options.html" title="8. Options"><link rel="next" href="zoom.events.html" title="10. Events"></head><body><link rel="stylesheet" type="text/css" href="common/style1.css"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">9. Query conversions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="zoom.options.html">Prev</a> </td><th width="60%" align="center">Chapter 3. ZOOM</th><td width="20%" align="right"> <a accesskey="n" href="zoom.events.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="zoom.queryconversions"></a>9. Query conversions</h2></div></div></div><pre class="synopsis">
+    int ZOOM_query_cql2rpn(ZOOM_query s, const char *cql_str,
+                           ZOOM_connection conn);
+
+    int ZOOM_query_ccl2rpn(ZOOM_query s, const char *ccl_str,
+                           const char *config,
+                           int *ccl_error, const char **error_string,
+                           int *error_pos);
+   </pre><p>
+    <code class="function">ZOOM_query_cql2rpn</code> translates the CQL string,
+    client-side, into RPN which may be passed to the server.
+    This is useful for server's that don't themselves
+    support CQL, for which <code class="function">ZOOM_query_cql</code> is useless.
+    `conn' is used  only as a place to stash diagnostics if compilation
+    fails; if this information is not needed, a null pointer may be used.
+    The CQL conversion is driven by option <code class="literal">cqlfile</code> from
+    connection conn. This specifies a conversion file (eg pqf.properties)
+    which <span class="emphasis"><em>must</em></span> be present.
+   </p><p>
+    <code class="function">ZOOM_query_ccl2rpn</code> translates the CCL string,
+    client-side, into RPN which may be passed to the server.
+    The conversion is driven by the specification given by
+    <code class="literal">config</code>. Upon completion 0 is returned on success; -1
+    is returned on on failure. Om failure <code class="literal">error_string</code> and
+    <code class="literal">error_pos</code> holds error message and position of
+    first error in original CCL string.
+   </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="zoom.options.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="zoom.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="zoom.events.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">8. Options </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 10. Events</td></tr></table></div></body></html>

@@ -1,0 +1,155 @@
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.4//EN"
+ "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+     <!ENTITY % local SYSTEM "local.ent">
+     %local;
+     <!ENTITY % entities SYSTEM "entities.ent">
+     %entities;
+     <!ENTITY % idcommon SYSTEM "common/common.ent">
+     %idcommon;
+     <!ENTITY gfs-synopsis-app "yaz-ztest">
+     <!ENTITY reference-tools-cql-map 'section "Specifiction of CQL to RPN mappings"'>
+     <!ENTITY reference-tools-cql-map 'section "CCL Qualifiers"'>
+]>
+<refentry id="yaz-ztest">
+ <refentryinfo>
+  <productname>YAZ</productname>
+  <productnumber>&version;</productnumber>
+  <info><orgname>Index Data</orgname></info>
+ </refentryinfo>
+
+ <refmeta>
+  <refentrytitle>yaz-ztest</refentrytitle>
+  <manvolnum>8</manvolnum>
+  <refmiscinfo class="manual">System management commands</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>yaz-ztest</refname>
+  <refpurpose>Z39.50/SRU Test Server</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv>
+  &gfs-synopsis;
+ </refsynopsisdiv>
+ <refsect1><title>DESCRIPTION</title>
+  <para>
+   <command>yaz-ztest</command> is a Z39.50/SRU test server that uses
+   the YAZ generic frontend server (GFS) API.
+   The server acts as a real Z39.50/SRU server but does not use a database.
+   It returns a random hit count and returns a subset of a few built-in
+   records.
+  </para>
+  <para>
+   The <replaceable>listener-spec</replaceable> consists of a transport
+   mode followed by a colon, followed by a listener address. The
+   transport mode is either <literal>tcp</literal>, <literal>unix</literal>,
+   or <literal>ssl</literal>.
+  </para>
+  <para>
+   For TCP and SSL, an address has the form:
+   <screen>
+    hostname | IP-number [ : portnumber ]
+   </screen>
+  </para>
+  <para>
+   For UNIX local socket the address is the filename of the local socket.
+  </para>
+ </refsect1>
+ <refsect1>
+  <title>OPTIONS</title>
+  &gfs-options;
+ </refsect1>
+ <refsect1>
+   <title>TESTING</title>
+   <para>
+    <command>yaz-ztest</command> normally returns a random hit count between
+    0 and 24. However, if a query term includes leading digits, then the
+    integer value of that term is used as hit count. This allows testers
+    to return any number of hits. <command>yaz-ztest</command> includes
+    24 MARC records for testing. Hit counts exceeding 24 will make
+    <command>yaz-ztest</command> return the same record batch over and over..
+    So record at position 1, 25, 49, etc .. are equivalent.
+   </para>
+   <para>
+    For XML if no element set is given or element has value "marcxml",
+    MARCXML is returned (each of the 24 dummy records converted from
+    ISO2709 to XML). For element set OP, OPAC XML is returned.
+   </para>
+   <para>
+    yaz-ztest may also return predefined XML records (for testing).
+    This is enabled if <literal>YAZ_ZTEST_XML_FETCH</literal> environment
+    variable is defined. A record is fetched form a file (one record per file).
+    The path for the filename is
+    <replaceable>F</replaceable><replaceable>E</replaceable><literal>.</literal><replaceable>d</replaceable><literal>.xml</literal>
+    where <replaceable>F</replaceable> is the YAZ_ZTEST_XML_FETCH value
+    (possibly
+    empty), <replaceable>E</replaceable> is element-set,
+    <replaceable>d</replaceable> is record position (starting from 1).
+   </para>
+   <para>
+     The following databases are honored by <command>yaz-ztest</command>:
+     <literal>Default</literal>, <literal>slow</literal>
+     and <literal>db.*</literal> (all databases with prefix "db"). Any
+     other database will make <command>yaz-ztest</command> return diagnostic
+     109: "Database unavailable".
+   </para>
+   <para>
+     Options for search may be included in the form or URL get arguments
+     included as part of the Z39.50 database name. The following
+     database options are present: <literal>search-delay</literal>,
+     <literal>present-delay</literal>, <literal>fetch-delay</literal>
+     and <literal>seed</literal>.
+   </para>
+   <para>
+     The former, delay type options, specify
+     a fake delay (sleep) that <command>yaz-ztest</command> will perform
+     when searching, presenting, fetching records respectively.
+     The value of the delay may either be a fixed floating point
+     value which specifies the delay in seconds.
+     Alternatively the value may be given as two floating point numbers
+     separated by colon, which wil make <command>yaz-ztest</command> perform
+     a random sleep between the first and second number.
+   </para>
+   <para>
+     The database parameter <literal>seed</literal> takes an integer
+     as value. This will call <literal>srand</literal> with this integer to
+     ensure that the random behavior can be re-played.
+   </para>
+   <para>
+     Suppose we want searches to take between 0.1 and 0.5 seconds and
+     a fetch to take 0.2 second. To access test database Default we'd use:
+     <literal>Default?search-delay=0.1:0.5&amp;fetch-delay=0.2</literal>.
+   </para>
+ </refsect1>
+ <refsect1><title>GFS CONFIGURATION AND VIRTUAL HOSTS</title>
+  &gfs-virtual;
+ </refsect1>
+ <refsect1><title>FILES</title>
+  <para>
+   <filename>yaz-&lt;version&gt;/ztest/yaz-ztest.c</filename>
+  </para>
+  <para>
+   <filename>yaz-&lt;version&gt;/include/yaz/backend.h</filename>
+  </para>
+ </refsect1>
+ <refsect1><title>SEE ALSO</title>
+  <para>
+   <citerefentry>
+    <refentrytitle>yaz</refentrytitle>
+    <manvolnum>7</manvolnum>
+   </citerefentry>
+   <citerefentry>
+    <refentrytitle>yaz-log</refentrytitle>
+    <manvolnum>7</manvolnum>
+   </citerefentry>
+  </para>
+ </refsect1>
+</refentry>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: nxml
+nxml-child-indent: 1
+End:
+-->
