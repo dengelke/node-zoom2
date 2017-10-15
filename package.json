@@ -6,10 +6,14 @@
   "directories": {
     "test": "test"
   },
-  "engines" : { "node" : ">=0.10" },
+  "engines": {
+    "node": ">=0.10"
+  },
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha tests",
-    "install": "node-gyp rebuild"
+    "cover": "istanbul cover ./node_modules/mocha/bin/mocha -- -- tests",
+    "install": "node-gyp rebuild",
+    "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls",
+    "test": "node ./node_modules/mocha/bin/mocha tests"
   },
   "repository": {
     "type": "git",
@@ -24,6 +28,8 @@
   "gypfile": true,
   "devDependencies": {
     "chai": "^1.10.0",
+    "coveralls": "^3.0.0",
+    "istanbul": "^0.4.5",
     "mocha": "^2.1.0"
   },
   "dependencies": {
