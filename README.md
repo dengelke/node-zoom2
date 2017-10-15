@@ -3,6 +3,8 @@ NODE-ZOOM2
 
 [![Build Status](https://travis-ci.org/dengelke/node-zoom2.svg?branch=master)](https://travis-ci.org/dengelke/node-zoom2)
 
+[![Coverage Status](https://coveralls.io/repos/github/dengelke/node-zoom2/badge.svg?branch=master)](https://coveralls.io/github/dengelke/node-zoom2?branch=master)
+
 ### Requirements
 
 * [gnutls](http://www.gnutls.org/)
