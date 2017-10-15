@@ -1,6 +1,8 @@
 NODE-ZOOM2
 =========
 
+[![Build Status](https://travis-ci.org/dengelke/node-zoom2.svg?branch=master)](https://travis-ci.org/dengelke/node-zoom2)
+
 ### Requirements
 
 * [gnutls](http://www.gnutls.org/)
