@@ -8,20 +8,24 @@ NODE-ZOOM2
 
 ### Requirements
 
-* [gnutls](http://www.gnutls.org/)
-* [gcrypt](http://www.gnu.org/software/libgcrypt/)
-* [libxml2](http://xmlsoft.org/)
+* [YAZ](http://www.indexdata.dk/yaz/)
 
 #### Debian/Ubuntu
 
 ```bash
-$ sudo apt-get install libgcrypt11-dev libgnutls28-dev libxml2-dev
+sudo apt-get install -y libyaz5-dev
+```
+
+#### Mac
+
+```bash
+brew install yaz
 ```
 
 ### Installaction
 
 ```bash
-$ npm i node-zoom2
+npm i node-zoom2
 ```
 
 ## Example
