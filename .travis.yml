@@ -8,9 +8,6 @@ node_js:
 before_install:
   - chmod +x ./travis/travis-init.sh
   - ./travis/travis-init.sh
-  - sudo apt-get install -y libyaz5 libyaz5-dev
-  - yaz-config --libs
-  - yaz-config --version
-  - yaz-config --prefix
+  - sudo apt-get install -y libyaz5-dev
 after_success:
 - npm run coveralls
