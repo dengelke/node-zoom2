@@ -8,5 +8,6 @@ node_js:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install yaz
+  - sudo apt-get install libyaz4-dev
 after_success:
 - npm run coveralls
