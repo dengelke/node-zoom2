@@ -1,7 +1,0 @@
-<searchClause>
-  <index>a</index>
-  <relation>
-    <value>any</value>
-  </relation>
-  <term>b</term>
-</searchClause>

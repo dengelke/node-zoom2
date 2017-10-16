@@ -2,11 +2,8 @@
   'targets': [
     {
       'target_name': 'zoom',
-      'cflags': [],
-      'libraries': [],
-      'dependencies': [
-        '<(module_root_dir)/deps/yaz/yaz.gyp:yaz'
-      ],
+      "cflags": ["<!@(yaz-config --libs --include)"],
+      "libraries": ["<!@(yaz-config --libs)"],
       'include_dirs': [
         '<!(node -e "require(\'nan\')")'
       ],
