@@ -6,6 +6,7 @@ node_js:
   - "6"
   - "8"
 before_install:
+  - sudo apt-get -qq update
   - sudo apt-get yaz
 after_success:
 - npm run coveralls
