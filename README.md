@@ -1,8 +1,9 @@
 NODE-ZOOM2
 =========
 
-[![Build Status](https://travis-ci.org/dengelke/node-zoom2.svg?branch=master)](https://travis-ci.org/dengelke/node-zoom2)
+[![npm package](https://nodei.co/npm/node-zoom2.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-zoom2/)
 
+[![Build Status](https://travis-ci.org/dengelke/node-zoom2.svg?branch=master)](https://travis-ci.org/dengelke/node-zoom2)
 [![Coverage Status](https://coveralls.io/repos/github/dengelke/node-zoom2/badge.svg?branch=master)](https://coveralls.io/github/dengelke/node-zoom2?branch=master)
 
 ### Requirements
