@@ -6,10 +6,7 @@ node_js:
   - "6"
   - "8"
 before_install:
-  - wget http://ftp.indexdata.dk/debian/indexdata.asc
-  - sudo apt-key add indexdata.asc
-  - sudo apt-get -qq update
-  - sudo apt-get install -y yaz
+  - ./travis/travis-init.sh
   - sudo apt-get install -y libyaz5 libyaz5-dev
   - yaz-config --libs
   - yaz-config --version
