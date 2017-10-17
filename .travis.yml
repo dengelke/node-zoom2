@@ -5,8 +5,5 @@ node_js:
   - "4"
   - "6"
   - "8"
-before_install:
-  - ./travis/travis-init.sh
-  - sudo apt-get install -y libyaz5-dev
 after_success:
 - npm run coveralls

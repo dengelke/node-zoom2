@@ -13,6 +13,7 @@
     "cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
     "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "install": "node-gyp rebuild",
+    "preinstall": "./preinstall.sh",
     "test": "node ./node_modules/mocha/bin/mocha test"
   },
   "repository": {
