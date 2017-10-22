@@ -13,21 +13,19 @@ conn.connect('192.83.186.170', 210, function (err) {
   if (err) {
     return console.log(err);
   }
-
-  var query = Query().prefix('@attr 1=4 台灣');
+  var query = Query().prefix('@attr 1=7 ' + '9780073383095');
 
   conn.search(query, function (err, resultset) {
     if (err) {
       return console.log(err);
     }
-    console.log(resultset.size());
     resultset.getRecords(0, 10, function (err, records) {
       if (err) {
         return console.log(err);
       }
-      while (records.hasNext()) {
+      while (records && records.hasNext()) {
         var record = records.next();
-        console.log(record.get('xml'));
+        console.log(record);
       }
     });
   });

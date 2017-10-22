@@ -4,12 +4,12 @@ var zoom = require('../lib');
 
 zoom.connection('192.83.186.170:210/INNOPAC')
   .set('preferredRecordSyntax', 'usmarc')
-  .query('prefix', '@attr 1=4 台灣')
+  .query('prefix', '@attr 1=7 ' + '9780073383095')
   .search(function (err, resultset) {
-    // resultset.set('option name', 'option value');
-    resultset.getRecords(0, 10, function (err, records) {
-      while (records.hasNext()) {
-        console.log(records.next().json);
+    resultset.getRecords(0, resultset.size, function (err, records) {
+      while (records && records.hasNext()) {
+        var record = records.next();
+        console.log(record);
       }
     });
   });
