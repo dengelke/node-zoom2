@@ -29,7 +29,7 @@ class GetRecordsWorker : public Nan::AsyncWorker {
         GetRecordsWorker(Nan::Callback *callback, ZOOM_resultset resultset,
             size_t index, size_t counts) :
             Nan::AsyncWorker(callback), zresultset_(resultset),
-            index_(index), counts_(counts) {};
+            counts_(counts), index_(index) {};
         ~GetRecordsWorker() {};
         void Execute();
         void HandleOKCallback();

@@ -1,4 +1,3 @@
-#pragma once
 #include <nan.h>
 #include <node.h>
 #include <sstream>

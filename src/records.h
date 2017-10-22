@@ -10,7 +10,7 @@ namespace node_zoom {
 class Records : public Nan::ObjectWrap {
     public:
         explicit Records(ZOOM_record *records, size_t counts) :
-            zrecords_(records), counts_(counts), index_(0) {};
+            zrecords_(records), index_(0), counts_(counts) {};
         ~Records();
 
         static void Init();

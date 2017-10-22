@@ -52,7 +52,7 @@ NAN_METHOD(Connection::New) {
         const int argc = 1;
         Local<Value> argv[argc] = { info[0] };
         Local<Function> cons = Nan::New<Function>(constructor);
-        info.GetReturnValue().Set(cons->NewInstance(argc, argv));
+        info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
     }
 }
 
@@ -169,7 +169,14 @@ void SearchWorker::HandleOKCallback() {
     Nan::HandleScope scope;
 
     ResultSet* resultset = new ResultSet(zresultset_);
-    Local<Object> wrapper = Nan::New(ResultSet::constructor)->NewInstance();
+    v8::Local<v8::Function> cons = Nan::New<v8::Function>(ResultSet::constructor);
+    Nan::MaybeLocal<v8::Object> maybeInstance = Nan::NewInstance(cons, 0, NULL);
+    v8::Local<v8::Object> wrapper;
+    if (maybeInstance.IsEmpty()) {
+        Nan::ThrowError("Could not create new ResultSet instance");
+    } else {
+        wrapper = maybeInstance.ToLocalChecked();
+    }
     Nan::SetInternalFieldPointer(wrapper, 0, resultset);
 
     Local<Value> argv[] = {

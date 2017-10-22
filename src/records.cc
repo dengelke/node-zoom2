@@ -42,7 +42,16 @@ NAN_METHOD(Records::Next) {
             info.GetReturnValue().Set(Nan::Null());
         } else {
             Record* record = new Record(ZOOM_record_clone(zrecord));
-            Local<Object> wrapper = Nan::New(Record::constructor)->NewInstance();
+            
+            v8::Local<v8::Function> cons = Nan::New<v8::Function>(Record::constructor);
+            Nan::MaybeLocal<v8::Object> maybeInstance = Nan::NewInstance(cons, 0, NULL);
+            v8::Local<v8::Object> wrapper;
+            if (maybeInstance.IsEmpty()) {
+                Nan::ThrowError("Could not create new Record instance");
+            } else {
+                wrapper = maybeInstance.ToLocalChecked();
+            }
+            // Local<Object> wrapper = Nan::New(Record::constructor)->NewInstance();
             Nan::SetInternalFieldPointer(wrapper, 0, record);
             info.GetReturnValue().Set(wrapper);
         }

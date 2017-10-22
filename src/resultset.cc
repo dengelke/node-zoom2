@@ -98,7 +98,16 @@ void GetRecordsWorker::HandleOKCallback() {
     Nan::HandleScope scope;
 
     Records* records = new Records(zrecords_, counts_);
-    Local<Object> wrapper = Nan::New(Records::constructor)->NewInstance();
+
+    v8::Local<v8::Function> cons = Nan::New<v8::Function>(Records::constructor);
+    Nan::MaybeLocal<v8::Object> maybeInstance = Nan::NewInstance(cons, 0, NULL);
+    v8::Local<v8::Object> wrapper;
+    if (maybeInstance.IsEmpty()) {
+        Nan::ThrowError("Could not create new Records instance");
+    } else {
+        wrapper = maybeInstance.ToLocalChecked();
+    }
+    // Local<Object> wrapper = Nan::New(Records::constructor)->NewInstance();
     Nan::SetInternalFieldPointer(wrapper, 0, records);
 
     Local<Value> argv[] = {
