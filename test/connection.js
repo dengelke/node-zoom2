@@ -1,22 +1,22 @@
-var connection = require('../lib/connection');
+var zoom = require('../lib');
 
 var expect = require('chai').expect;
 
 describe('connection', function() {
   this.timeout(20000);
   it('should get/set values', function() {
-    expect(connection('192.83.186.170:210/INNOPAC')
+    expect(zoom.connection('192.83.186.170:210/INNOPAC')
     .set('preferredRecordSyntax', 'usmarc')
     .get('preferredRecordSyntax')).to.equal('usmarc');
   })
   it('should set query with only 1 one arguement', function() {
-    expect(connection('192.83.186.170:210/INNOPAC')
+    expect(zoom.connection('192.83.186.170:210/INNOPAC')
     .set('preferredRecordSyntax', 'usmarc')
     .query('@attr 1=7 ' + '9780073383095')._query['prefix']).to.be.an('function');
   })
   it('should fail at createReadStream without query', function(done) {
     try {
-      connection('192.83.186.170:210/INNOPAC')
+      zoom.connection('192.83.186.170:210/INNOPAC')
       .set('preferredRecordSyntax', 'usmarc')
       .createReadStream()
     } catch (e) {
@@ -29,7 +29,7 @@ describe('connection', function() {
   })
   it('should fail at searching without query', function(done) {
     try {
-      connection('192.83.186.170:210/INNOPAC')
+      zoom.connection('192.83.186.170:210/INNOPAC')
       .set('preferredRecordSyntax', 'usmarc')
       .search()
     } catch (e) {
@@ -42,7 +42,7 @@ describe('connection', function() {
   })
   it('should fail at sorting without query', function(done) {
     try {
-      connection('192.83.186.170:210/INNOPAC')
+      zoom.connection('192.83.186.170:210/INNOPAC')
       .set('preferredRecordSyntax', 'usmarc')
       .sort('error')
     } catch (e) {
@@ -54,7 +54,7 @@ describe('connection', function() {
     }
   })
   it('should have error', function(done) {
-    connection('192.83.186.170:210/INNOPA')
+    zoom.connection('192.83.186.170:210/INNOPA')
     .set('preferredRecordSyntax', 'usmarc')
     .query('prefix', '@attr 1=7 ' + '9780230343719')
     .search(function (err, resultset) {
@@ -66,7 +66,7 @@ describe('connection', function() {
     })
   })
   it('should query, search and resultset functions work', function(done) {
-    connection('192.83.186.170:210/INNOPAC')
+    zoom.connection('192.83.186.170:210/INNOPAC')
     .set('preferredRecordSyntax', 'usmarc')
     .query('prefix', '@attr 1=7 ' + '9780073383095')
     .search(function (err, resultset) {
@@ -89,7 +89,7 @@ describe('connection', function() {
     })
   })
   it('should createReadStream', function(done) {
-    connection('192.83.186.170:210/INNOPAC')
+    zoom.connection('192.83.186.170:210/INNOPAC')
     .set('preferredRecordSyntax', 'usmarc')
     .query('prefix', '@attr 1=7 ' + '9780073383095')
     .createReadStream()
