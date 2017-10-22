@@ -1,8 +1,5 @@
 sudo: required
 language: node_js
-os:
-  - linux
-  - osx
 node_js:
   - "0.10"
   - "0.12"
