@@ -1,6 +1,6 @@
 {
   "name": "node-zoom2",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "z39.50 with Node 4+ support",
   "main": "index.js",
   "directories": {
