@@ -11,4 +11,5 @@ node_js:
   - "8"
 before_install:
   - ./preinstall.sh
-script: npm run coveralls
+after_success:
+- npm run coveralls
