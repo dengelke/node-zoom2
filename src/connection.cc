@@ -23,6 +23,7 @@ void Connection::Init(Handle<Object> exports) {
     Nan::SetPrototypeMethod(tpl, "connect", Connect);
     Nan::SetPrototypeMethod(tpl, "destory", Destory);
     Nan::SetPrototypeMethod(tpl, "search", Search);
+    Nan::SetPrototypeMethod(tpl, "update", Update);
 
     constructor.Reset(tpl->GetFunction());
     exports->Set(Nan::New("Connection").ToLocalChecked(), tpl->GetFunction());
@@ -30,6 +31,7 @@ void Connection::Init(Handle<Object> exports) {
 
 Connection::Connection(Options *opts) {
     zconn_ = ZOOM_connection_create(opts->zoom_options());
+    ZOOM_connection_option_set(zconn_, "saveAPDU", "1");
 }
 
 Connection::~Connection() {
@@ -97,6 +99,17 @@ NAN_METHOD(Connection::Destory) {
     ZOOM_connection_destroy(connection->zconn_);
 }
 
+NAN_METHOD(Connection::Update) {
+    Nan::HandleScope scope;
+
+    Connection* connection = Nan::ObjectWrap::Unwrap<Connection>(info.This());
+    Options* packageOpts = Nan::ObjectWrap::Unwrap<Options>(info[0]->ToObject());
+    
+    Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
+    UpdateWorker *worker = new UpdateWorker(callback, connection->zconn_, packageOpts->zoom_options());
+    Nan::AsyncQueueWorker(worker);
+}
+
 NAN_METHOD(Connection::Search) {
     Nan::HandleScope scope;
 
@@ -146,6 +159,75 @@ void ConnectWorker::Execute() {
         SetErrorMessage(ss.str().c_str());
     }
 }
+
+void UpdateWorker::Execute() {
+    z_package = ZOOM_connection_package(zconn_, zoptions_);
+    ZOOM_package_send(z_package, "update");
+
+    int error = 0;
+    const char *errmsg, *addinfo;
+
+    if ((error = ZOOM_connection_error(zconn_, &errmsg, &addinfo))) {
+        std::ostringstream ss;
+        ss << ZOOM_connection_option_get(zconn_, "host")
+            << " error "
+            << errmsg
+            << "(" << error << ")"
+            << " " << addinfo;
+
+        SetErrorMessage(ss.str().c_str());
+    }
+
+}
+
+void UpdateWorker::HandleOKCallback() {
+    Nan::HandleScope scope;
+
+    const char *targetReference = ZOOM_package_option_get(z_package, "targetReference");
+    const char *xmlUpdateDoc = ZOOM_package_option_get(z_package, "xmlUpdateDoc");
+    const char *apdu = ZOOM_connection_option_get(zconn_, "APDU");
+
+    Local<Object> jsonObject = Nan::New<Object>();
+
+    if(targetReference != NULL) {
+        Local<Value> targetReferenceProp = Nan::New("targetReference").ToLocalChecked();
+        Local<Value> targetReferenceValue = Nan::New(targetReference).ToLocalChecked();
+        Nan::Set(jsonObject, targetReferenceProp, targetReferenceValue);
+    }
+
+    if(xmlUpdateDoc != NULL) {
+        Local<Value> xmlUpdateDocProp = Nan::New("xmlUpdateDoc").ToLocalChecked();
+        Local<Value> xmlUpdateDocValue = Nan::New(xmlUpdateDoc).ToLocalChecked();
+        Nan::Set(jsonObject, xmlUpdateDocProp, xmlUpdateDocValue);
+    }
+
+    if(apdu != NULL) {
+        Local<String> apduProp = Nan::New("apdu").ToLocalChecked();
+        Local<String> apduValue = Nan::New(apdu).ToLocalChecked();
+        Nan::Set(jsonObject, apduProp, apduValue);
+    }
+
+
+    Local<Value> argv[] = {
+        Nan::Null(),
+        jsonObject
+    };
+
+    ZOOM_package_destroy(z_package);
+    callback->Call(2, argv);
+}
+
+void UpdateWorker::HandleErrorCallback() {
+    Nan::HandleScope scope;
+    v8::Local<v8::Value> argv[] = {
+      Nan::New(this->ErrorMessage()).ToLocalChecked(),
+      Nan::Null()
+    };
+
+    ZOOM_package_destroy(z_package);
+    callback->Call(2, argv);
+}
+
 
 void SearchWorker::Execute() {
     zresultset_ = ZOOM_connection_search(zconn_, zquery_);
