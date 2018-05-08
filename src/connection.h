@@ -18,6 +18,7 @@ class Connection : public Nan::ObjectWrap {
         static NAN_METHOD(Connect);
         static NAN_METHOD(Destory);
         static NAN_METHOD(Search);
+        static NAN_METHOD(Update);
 
     protected:
         ZOOM_connection zconn_;
@@ -52,6 +53,23 @@ class SearchWorker : public Nan::AsyncWorker {
         ZOOM_connection zconn_;
         ZOOM_query zquery_;
         ZOOM_resultset zresultset_;
+};
+
+class UpdateWorker : public Nan::AsyncWorker {
+    public:
+        UpdateWorker(Nan::Callback *callback, ZOOM_connection zconn,
+            ZOOM_options options) :
+            Nan::AsyncWorker(callback), zconn_(zconn), zoptions_(options) {};
+        ~UpdateWorker() {};
+        void Execute();
+        void HandleOKCallback();
+        void HandleErrorCallback();
+
+    protected:
+        ZOOM_connection zconn_;
+        ZOOM_options zoptions_;
+        ZOOM_resultset zresultset_;
+        ZOOM_package z_package;
 };
 
 } // namespace node_zoom
