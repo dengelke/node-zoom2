@@ -1,13 +1,13 @@
 {
   "name": "node-zoom2",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "z39.50 with Node 4+ support",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "engines": {
-    "node": ">=0.10"
+    "node": ">=8"
   },
   "scripts": {
     "cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
