@@ -13,7 +13,7 @@ class Options : public Nan::ObjectWrap {
         explicit Options(Options *opts);
         ~Options();
 
-        static void Init(v8::Handle<v8::Object> exports);
+        static void Init(v8::Local<v8::Object> exports);
         static NAN_METHOD(New);
         static NAN_METHOD(Get);
         static NAN_METHOD(Set);

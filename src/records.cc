@@ -20,7 +20,7 @@ void Records::Init() {
     Nan::SetPrototypeMethod(tpl, "next", Next);
     Nan::SetPrototypeMethod(tpl, "hasNext", HasNext);
 
-    constructor.Reset(tpl->GetFunction());
+    constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Records::~Records() {

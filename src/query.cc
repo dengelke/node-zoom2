@@ -13,7 +13,7 @@ void check_query_ret(int ret) {
 
 Nan::Persistent<Function> Query::constructor;
 
-void Query::Init(Handle<Object> exports) {
+void Query::Init(Local<Object> exports) {
     Nan::HandleScope scope;
 
     // Prepare constructor template
@@ -26,8 +26,8 @@ void Query::Init(Handle<Object> exports) {
     Nan::SetPrototypeMethod(tpl, "cql", CQL);
     Nan::SetPrototypeMethod(tpl, "sortBy", SortBy);
 
-    constructor.Reset(tpl->GetFunction());
-    exports->Set(Nan::New("Query").ToLocalChecked(), tpl->GetFunction());
+    constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
+    exports->Set(Nan::New("Query").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Query::Query() {
@@ -74,7 +74,8 @@ NAN_METHOD(Query::CQL) {
 NAN_METHOD(Query::SortBy) {
     Nan::HandleScope scope;
 
-    Query* query = Nan::ObjectWrap::Unwrap<Query>(info[0]->ToObject());
+    // Query* query = Nan::ObjectWrap::Unwrap<Query>(info[0]->ToObject());
+    Query* query = Nan::ObjectWrap::Unwrap<Query>(Nan::To<Object>(info[0]).ToLocalChecked());
     int ret;
     Nan::Utf8String strategy(info[0]);
     Nan::Utf8String criteria(info[1]);

@@ -7,7 +7,7 @@ namespace node_zoom {
 
 Nan::Persistent<Function> Options::constructor;
 
-void Options::Init(Handle<Object> exports) {
+void Options::Init(Local<Object> exports) {
     Nan::HandleScope scope;
 
     // Prepare constructor template
@@ -19,8 +19,8 @@ void Options::Init(Handle<Object> exports) {
     Nan::SetPrototypeMethod(tpl, "get", Get);
     Nan::SetPrototypeMethod(tpl, "set", Set);
 
-    constructor.Reset(tpl->GetFunction());
-    exports->Set(Nan::New("Options").ToLocalChecked(), tpl->GetFunction());
+    constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
+    exports->Set(Nan::New("Options").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Options::Options() {
@@ -48,7 +48,7 @@ NAN_METHOD(Options::New) {
         if (info[0]->IsUndefined()) {
             obj = new Options();
         } else {
-            Options* opts = Nan::ObjectWrap::Unwrap<Options>(info[0]->ToObject());
+            Options* opts = Nan::ObjectWrap::Unwrap<Options>(Nan::To<Object>(info[0]).ToLocalChecked());
             obj = new Options(opts);
         }
 

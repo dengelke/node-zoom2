@@ -8,7 +8,7 @@
 
 using namespace v8;
 
-void InitAll(Handle<Object> exports) {
+void InitAll(Local<Object> exports) {
     node_zoom::Query::Init(exports);
     node_zoom::Options::Init(exports);
     node_zoom::Connection::Init(exports);
