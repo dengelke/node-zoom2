@@ -27,6 +27,7 @@ brew install yaz
 ```bash
 npm i node-zoom2
 ```
+
 #### Common Installation Issues
 
 If libyaz5-dev is not available on your distributions package manager by default run (or have a look at)

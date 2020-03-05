@@ -18,7 +18,7 @@ void Record::Init() {
     // Prototype
     Nan::SetPrototypeMethod(tpl, "get", Get);
 
-    constructor.Reset(tpl->GetFunction());
+    constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Record::Record(ZOOM_record record) : zrecord_(record) {}

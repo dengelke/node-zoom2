@@ -14,6 +14,11 @@ describe('connection', function() {
     .set('preferredRecordSyntax', 'usmarc')
     .query('@attr 1=7 ' + '9780073383095')._query['prefix']).to.be.an('function');
   })
+  it('should set query with only 1 one arguement', function() {
+    expect(zoom.connection('192.83.186.170:210/INNOPAC')
+    .set('preferredRecordSyntax', 'usmarc')
+    .query('@attr 1=4 ' + 'Jitter in')._query['prefix']).to.be.an('function');
+  })
   it('should fail at createReadStream without query', function(done) {
     try {
       zoom.connection('192.83.186.170:210/INNOPAC')

@@ -16,6 +16,9 @@ describe('Query', function () {
     it('should work', function () {
       Query().prefix('@attr 1=4 台灣');
     });
+    it('should work', function () {
+      Query().prefix('@attr 1=4 Jitter\u00A0in');
+    });
   });
 
   describe('#cql()', function () {

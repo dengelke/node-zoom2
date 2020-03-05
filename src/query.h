@@ -12,7 +12,7 @@ class Query : public Nan::ObjectWrap {
         explicit Query();
         ~Query();
 
-        static void Init(v8::Handle<v8::Object> exports);
+        static void Init(v8::Local<v8::Object> exports);
         static NAN_METHOD(New);
         static NAN_METHOD(Prefix);
         static NAN_METHOD(CQL);

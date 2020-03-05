@@ -20,7 +20,7 @@ void Records::Init() {
     Nan::SetPrototypeMethod(tpl, "next", Next);
     Nan::SetPrototypeMethod(tpl, "hasNext", HasNext);
 
-    constructor.Reset(tpl->GetFunction());
+    constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Records::~Records() {
@@ -51,7 +51,6 @@ NAN_METHOD(Records::Next) {
             } else {
                 wrapper = maybeInstance.ToLocalChecked();
             }
-            // Local<Object> wrapper = Nan::New(Record::constructor)->NewInstance();
             Nan::SetInternalFieldPointer(wrapper, 0, record);
             info.GetReturnValue().Set(wrapper);
         }

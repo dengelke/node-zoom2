@@ -11,7 +11,7 @@ namespace node_zoom {
 
 Nan::Persistent<Function> Connection::constructor;
 
-void Connection::Init(Handle<Object> exports) {
+void Connection::Init(Local<Object> exports) {
     Nan::HandleScope scope;
 
     // Prepare constructor template
@@ -25,8 +25,8 @@ void Connection::Init(Handle<Object> exports) {
     Nan::SetPrototypeMethod(tpl, "search", Search);
     Nan::SetPrototypeMethod(tpl, "update", Update);
 
-    constructor.Reset(tpl->GetFunction());
-    exports->Set(Nan::New("Connection").ToLocalChecked(), tpl->GetFunction());
+    constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
+    exports->Set(Nan::New("Connection").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Connection::Connection(Options *opts) {
@@ -46,7 +46,7 @@ NAN_METHOD(Connection::New) {
             Nan::ThrowError(ArgsSizeError("Constructor", 1, info.Length()));
             return;
         }
-        Options* opts = Nan::ObjectWrap::Unwrap<Options>(info[0]->ToObject());
+        Options* opts = Nan::ObjectWrap::Unwrap<Options>(Nan::To<Object>(info[0]).ToLocalChecked());
         Connection* obj = new Connection(opts);
         obj->Wrap(info.This());
         info.GetReturnValue().Set(info.This());
@@ -84,7 +84,7 @@ NAN_METHOD(Connection::Connect) {
     Connection* connection = Nan::ObjectWrap::Unwrap<Connection>(info.This());
 
     Nan::Utf8String *host = new Nan::Utf8String(info[0]);
-    int port = info[1]->Uint32Value();
+    int port = info[1]->Uint32Value(Nan::GetCurrentContext()).FromJust();
     Nan::Callback *callback = new Nan::Callback(info[2].As<Function>());
     ConnectWorker *worker = new ConnectWorker(
         callback, connection->zconn_, host, port);
@@ -103,7 +103,7 @@ NAN_METHOD(Connection::Update) {
     Nan::HandleScope scope;
 
     Connection* connection = Nan::ObjectWrap::Unwrap<Connection>(info.This());
-    Options* packageOpts = Nan::ObjectWrap::Unwrap<Options>(info[0]->ToObject());
+    Options* packageOpts = Nan::ObjectWrap::Unwrap<Options>(Nan::To<Object>(info[0]).ToLocalChecked());
     
     Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
     UpdateWorker *worker = new UpdateWorker(callback, connection->zconn_, packageOpts->zoom_options());
@@ -129,7 +129,7 @@ NAN_METHOD(Connection::Search) {
     }
 
     Connection* connection = Nan::ObjectWrap::Unwrap<Connection>(info.This());
-    Query* query = Nan::ObjectWrap::Unwrap<Query>(info[0]->ToObject());
+    Query* query = Nan::ObjectWrap::Unwrap<Query>(Nan::To<Object>(info[0]).ToLocalChecked());
     
     Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
     SearchWorker *worker = new SearchWorker(
