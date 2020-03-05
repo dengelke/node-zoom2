@@ -25,8 +25,6 @@ void Connection::Init(Local<Object> exports) {
     Nan::SetPrototypeMethod(tpl, "search", Search);
     Nan::SetPrototypeMethod(tpl, "update", Update);
 
-    // constructor.Reset(tpl->Nan::GetFunction());
-    // exports->Set(Nan::New("Connection").ToLocalChecked(), tpl->GetFunction());
     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
     exports->Set(Nan::New("Connection").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }

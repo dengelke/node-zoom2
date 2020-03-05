@@ -73,9 +73,7 @@ NAN_METHOD(ResultSet::GetRecords) {
     }
 
     ResultSet* resset = Nan::ObjectWrap::Unwrap<ResultSet>(info.This());
-    // size_t index = info[0]->Uint32Value();
     size_t index = info[0]->Uint32Value(Nan::GetCurrentContext()).FromJust();
-    // size_t counts = info[1]->Uint32Value();
     size_t counts = info[1]->Uint32Value(Nan::GetCurrentContext()).FromJust();
 
     Nan::Callback *callback = new Nan::Callback(info[2].As<Function>());
@@ -109,7 +107,6 @@ void GetRecordsWorker::HandleOKCallback() {
     } else {
         wrapper = maybeInstance.ToLocalChecked();
     }
-    // Local<Object> wrapper = Nan::New(Records::constructor)->NewInstance();
     Nan::SetInternalFieldPointer(wrapper, 0, records);
 
     Local<Value> argv[] = {

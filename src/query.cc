@@ -74,7 +74,6 @@ NAN_METHOD(Query::CQL) {
 NAN_METHOD(Query::SortBy) {
     Nan::HandleScope scope;
 
-    // Query* query = Nan::ObjectWrap::Unwrap<Query>(info[0]->ToObject());
     Query* query = Nan::ObjectWrap::Unwrap<Query>(Nan::To<Object>(info[0]).ToLocalChecked());
     int ret;
     Nan::Utf8String strategy(info[0]);

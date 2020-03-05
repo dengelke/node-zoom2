@@ -51,7 +51,6 @@ NAN_METHOD(Records::Next) {
             } else {
                 wrapper = maybeInstance.ToLocalChecked();
             }
-            // Local<Object> wrapper = Nan::New(Record::constructor)->NewInstance();
             Nan::SetInternalFieldPointer(wrapper, 0, record);
             info.GetReturnValue().Set(wrapper);
         }
