@@ -23,4 +23,3 @@ jobs:
       - run: ./preinstall.sh
       - run: npm install
       - run: npm test
-      - run: npm run coveralls
