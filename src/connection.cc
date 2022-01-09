@@ -213,7 +213,7 @@ void UpdateWorker::HandleOKCallback() {
     };
 
     ZOOM_package_destroy(z_package);
-    callback->Call(2, argv);
+    callback->Call(2, argv, async_resource);
 }
 
 void UpdateWorker::HandleErrorCallback() {
@@ -224,7 +224,7 @@ void UpdateWorker::HandleErrorCallback() {
     };
 
     ZOOM_package_destroy(z_package);
-    callback->Call(2, argv);
+    callback->Call(2, argv, async_resource);
 }
 
 
@@ -265,7 +265,7 @@ void SearchWorker::HandleOKCallback() {
         wrapper
     };
 
-    callback->Call(2, argv);
+    callback->Call(2, argv, async_resource);
 }
 
 } // namespace node_zoom
