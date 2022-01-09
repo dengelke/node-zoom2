@@ -9,7 +9,6 @@ Nan::Persistent<Function> Options::constructor;
 
 void Options::Init(Local<Object> exports) {
     Nan::HandleScope scope;
-    v8::Local<v8::Context> context = exports->CreationContext();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
@@ -21,7 +20,7 @@ void Options::Init(Local<Object> exports) {
     Nan::SetPrototypeMethod(tpl, "set", Set);
 
     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
-    exports->Set(context, Nan::New("Options").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
+    Nan::Set(exports, Nan::New("Options").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Options::Options() {
