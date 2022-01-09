@@ -6,6 +6,8 @@ node_js:
   - "8"
   - "10"
   - "12"
+  - "14"
+  - "16"
 before_install:
   - ./preinstall.sh
 after_success:

@@ -13,6 +13,7 @@ Nan::Persistent<Function> Connection::constructor;
 
 void Connection::Init(Local<Object> exports) {
     Nan::HandleScope scope;
+    v8::Local<v8::Context> context = exports->CreationContext();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
@@ -26,7 +27,7 @@ void Connection::Init(Local<Object> exports) {
     Nan::SetPrototypeMethod(tpl, "update", Update);
 
     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
-    exports->Set(Nan::New("Connection").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
+    exports->Set(context, Nan::New("Connection").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Connection::Connection(Options *opts) {

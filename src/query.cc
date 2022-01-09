@@ -15,6 +15,7 @@ Nan::Persistent<Function> Query::constructor;
 
 void Query::Init(Local<Object> exports) {
     Nan::HandleScope scope;
+    v8::Local<v8::Context> context = exports->CreationContext();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
@@ -27,7 +28,7 @@ void Query::Init(Local<Object> exports) {
     Nan::SetPrototypeMethod(tpl, "sortBy", SortBy);
 
     constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
-    exports->Set(Nan::New("Query").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
+    exports->Set(context, Nan::New("Query").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 Query::Query() {
