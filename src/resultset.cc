@@ -114,7 +114,7 @@ void GetRecordsWorker::HandleOKCallback() {
         wrapper
     };
 
-    callback->Call(2, argv);
+    callback->Call(2, argv, async_resource);
 }
 
 } // namespace node_zoom
