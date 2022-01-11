@@ -47,7 +47,7 @@ NAN_METHOD(Query::New) {
         info.GetReturnValue().Set(info.This());
     } else {
         const int argc = 0;
-        Local<Value> argv[argc] = {};
+        Local<Value> argv[1] = {};
         Local<Function> cons = Nan::New<Function>(constructor);
         info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
     }
