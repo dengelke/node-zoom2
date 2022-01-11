@@ -1,6 +1,6 @@
 {
   "name": "node-zoom2",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "z39.50 with Node 4+ support",
   "main": "index.js",
   "directories": {
@@ -21,7 +21,10 @@
   },
   "keywords": [
     "zoom",
-    "z39.50"
+    "z39.50",
+    "marc",
+    "marcxml",
+    "iso2709"
   ],
   "author": "Daniel Engelke <dengelke91@gmail.com>",
   "license": "MIT",
