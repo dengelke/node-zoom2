@@ -22,6 +22,10 @@ sudo apt-get install -y libyaz5-dev
 brew install yaz
 ```
 
+#### Windows
+
+Install yaz5 for your respective operating system via the FTP links for ([x86](https://ftp.indexdata.com/pub/yaz/win32/) or [x64](https://ftp.indexdata.com/pub/yaz/win64/))
+
 ### Installation
 
 ```bash
