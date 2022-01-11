@@ -3,9 +3,9 @@
     {
       'target_name': 'binding',
       'conditions': [
-        ['OS=="mac"', {
+        ['OS!="win"', {
           'dependencies': [
-            'binding-mac.gyp:zoom',
+            'binding-not-win.gyp:zoom',
           ],
         }],
         ['OS=="win"', {
