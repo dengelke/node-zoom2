@@ -97,14 +97,16 @@ describe('connection', function() {
     zoom.connection('192.83.186.170:210/INNOPAC')
     .set('preferredRecordSyntax', 'usmarc')
     .query('prefix', '@attr 1=7 ' + '9780073383095')
-    .createReadStream({chunk: 1, limit: 1})
+    .createReadStream()
     .on('data', function (record) {
       if (record.json && record.xml && record.txml && record.render && record.raw) {
         expect(record.schema).to.be.an('undefined');
         expect(record.database).to.equal('INNOPAC');
         expect(record.syntax).to.equal('USmarc');
-        done();
       }
+    })
+    .on('close', function() {
+      done();
     })
   })
 })
