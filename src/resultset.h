@@ -14,6 +14,7 @@ class ResultSet : public Nan::ObjectWrap {
 
         static void Init();
         static NAN_METHOD(New);
+        static NAN_METHOD(Destroy);
         static NAN_METHOD(GetOption);
         static NAN_METHOD(SetOption);
         static NAN_METHOD(GetRecords);

@@ -86,9 +86,12 @@ describe('connection', function() {
         if (record.json) {
           resultset.set('test', 'value');
           expect(resultset.get('test')).to.equal('value');
+          expect(resultset._resultset).to.not.equal(undefined);
+          resultset.destroy();
+          expect(resultset._resultset).to.equal(undefined);
           done();
         } else {
-          done('No record found')
+          done('No record found');
         }
       })
     })
