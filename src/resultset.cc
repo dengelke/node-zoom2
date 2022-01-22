@@ -17,6 +17,7 @@ void ResultSet::Init() {
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     
     // Prototype
+    Nan::SetPrototypeMethod(tpl, "destroy", Destroy);
     Nan::SetPrototypeMethod(tpl, "setOption", SetOption);
     Nan::SetPrototypeMethod(tpl, "getOption", GetOption);
     Nan::SetPrototypeMethod(tpl, "size", Size);
@@ -32,6 +33,11 @@ ResultSet::~ResultSet() {
 }
 
 NAN_METHOD(ResultSet::New) {}
+
+NAN_METHOD(ResultSet::Destroy) {
+    ResultSet* resset = Nan::ObjectWrap::Unwrap<ResultSet>(info.This());
+    ZOOM_resultset_destroy(resset->zset_);
+}
 
 NAN_METHOD(ResultSet::GetOption) {
     ResultSet* resset = Nan::ObjectWrap::Unwrap<ResultSet>(info.This());
