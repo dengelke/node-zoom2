@@ -70,10 +70,12 @@ zoom.connection('192.83.186.170:210/INNOPAC')
 * `#query([type], querystring)`
 * `#search(callback)`
 * `#createReadStream([options])`
+* `#destroy()`
 
 ### ResultSet
 
 * `.size`
+* `#destroy()`
 * `#getRecords(start, count, callback)`
 
 ### Records
