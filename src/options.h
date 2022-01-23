@@ -15,6 +15,7 @@ class Options : public Nan::ObjectWrap {
 
         static void Init(v8::Local<v8::Object> exports);
         static NAN_METHOD(New);
+        static NAN_METHOD(Destroy);
         static NAN_METHOD(Get);
         static NAN_METHOD(Set);
         ZOOM_options zoom_options();

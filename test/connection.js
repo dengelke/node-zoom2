@@ -97,7 +97,7 @@ describe('connection', function() {
     })
   })
   it('should createReadStream', function(done) {
-    zoom.connection('192.83.186.170:210/INNOPAC')
+    var conn = zoom.connection('192.83.186.170:210/INNOPAC')
     .set('preferredRecordSyntax', 'usmarc')
     .query('prefix', '@attr 1=7 ' + '9780073383095')
     .createReadStream()
@@ -109,6 +109,7 @@ describe('connection', function() {
       }
     })
     .on('close', function() {
+      conn.destroy();
       done();
     })
   })

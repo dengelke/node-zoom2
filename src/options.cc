@@ -16,6 +16,7 @@ void Options::Init(Local<Object> exports) {
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     
     // Prototype
+    Nan::SetPrototypeMethod(tpl, "destroy", Destroy);
     Nan::SetPrototypeMethod(tpl, "get", Get);
     Nan::SetPrototypeMethod(tpl, "set", Set);
 
@@ -60,6 +61,13 @@ NAN_METHOD(Options::New) {
         Local<Function> cons = Nan::New<Function>(constructor);
         info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
     }
+}
+
+NAN_METHOD(Options::Destroy) {
+    Nan::HandleScope scope;
+
+    Options* opts = Nan::ObjectWrap::Unwrap<Options>(info.This());
+    ZOOM_options_destroy(opts->zopts_);
 }
 
 NAN_METHOD(Options::Get) {
