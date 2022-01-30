@@ -20,7 +20,7 @@ void Connection::Init(Local<Object> exports) {
     
     // Prototype
     Nan::SetPrototypeMethod(tpl, "connect", Connect);
-    Nan::SetPrototypeMethod(tpl, "destory", Destory);
+    Nan::SetPrototypeMethod(tpl, "destroy", Destroy);
     Nan::SetPrototypeMethod(tpl, "search", Search);
     Nan::SetPrototypeMethod(tpl, "update", Update);
 
@@ -91,7 +91,7 @@ NAN_METHOD(Connection::Connect) {
     Nan::AsyncQueueWorker(worker);
 }
 
-NAN_METHOD(Connection::Destory) {
+NAN_METHOD(Connection::Destroy) {
     Nan::HandleScope scope;
 
     Connection* connection = Nan::ObjectWrap::Unwrap<Connection>(info.This());

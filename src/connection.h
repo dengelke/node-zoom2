@@ -16,7 +16,7 @@ class Connection : public Nan::ObjectWrap {
         static void Init(v8::Local<v8::Object> exports);
         static NAN_METHOD(New);
         static NAN_METHOD(Connect);
-        static NAN_METHOD(Destory);
+        static NAN_METHOD(Destroy);
         static NAN_METHOD(Search);
         static NAN_METHOD(Update);
 
