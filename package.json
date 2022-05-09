@@ -3,6 +3,7 @@
   "version": "0.7.3",
   "description": "z39.50 with Node 4+ support",
   "main": "index.js",
+  "types": "index.d.ts",
   "directories": {
     "test": "test"
   },
