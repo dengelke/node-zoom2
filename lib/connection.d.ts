@@ -34,6 +34,13 @@ export class Connection extends Readable {
   get(key: string): string;
 
   /**
+   * Establishes a connection.
+   *
+   * Note: returned value is actually a clone of the connection.
+   */
+  connect(cb: (error: Error) => void): this;
+
+  /**
    * Prepares search query using specified query type.
    *
    * Note: returned value is actually a clone of the connection.
