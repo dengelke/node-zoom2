@@ -1,14 +1,14 @@
 {
   "name": "node-zoom2",
-  "version": "0.8.1",
-  "description": "z39.50 with Node 4+ support",
+  "version": "0.9.0",
+  "description": "z39.50 with Node 10+ support",
   "main": "index.js",
   "types": "index.d.ts",
   "directories": {
     "test": "test"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=10"
   },
   "scripts": {
     "cover": "istanbul cover ./node_modules/mocha/bin/_mocha",
@@ -34,7 +34,7 @@
     "chai": "^1.10.0",
     "coveralls": "^3.0.0",
     "istanbul": "^0.4.5",
-    "mocha": "^4.0.0"
+    "mocha": "^10.0.0"
   },
   "dependencies": {
     "bindings": "^1.5.0",
