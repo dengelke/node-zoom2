@@ -1,5 +1,5 @@
 export class Record {
-  json: string;
+  json: object;
   database: string;
   syntax: string;
   schema: string;
